@@ -1,0 +1,307 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 48;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		562E133C1FE3AC21009C78AB /* JYBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 562E133B1FE3AC21009C78AB /* JYBinder.m */; };
+		562E133D1FE3AC21009C78AB /* JYBinder.h in CopyFiles */ = {isa = PBXBuildFile; fileRef = 562E133A1FE3AC21009C78AB /* JYBinder.h */; };
+		5654BBCF1FE75623008D8DDA /* JYBinderProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBCE1FE75623008D8DDA /* JYBinderProxy.m */; };
+		5654BBD21FE75EDF008D8DDA /* JYBinderUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD11FE75EDF008D8DDA /* JYBinderUtil.m */; };
+		5654BBD51FE794BC008D8DDA /* JYBinderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD41FE794BC008D8DDA /* JYBinderNode.m */; };
+		5654BBD81FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		562E13351FE3AC21009C78AB /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "include/$(PRODUCT_NAME)";
+			dstSubfolderSpec = 16;
+			files = (
+				562E133D1FE3AC21009C78AB /* JYBinder.h in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		562E13371FE3AC21009C78AB /* libJYBinder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJYBinder.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		562E133A1FE3AC21009C78AB /* JYBinder.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinder.h; sourceTree = "<group>"; };
+		562E133B1FE3AC21009C78AB /* JYBinder.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinder.m; sourceTree = "<group>"; };
+		5654BBCD1FE75623008D8DDA /* JYBinderProxy.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderProxy.h; sourceTree = "<group>"; };
+		5654BBCE1FE75623008D8DDA /* JYBinderProxy.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderProxy.m; sourceTree = "<group>"; };
+		5654BBD01FE75EDF008D8DDA /* JYBinderUtil.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderUtil.h; sourceTree = "<group>"; };
+		5654BBD11FE75EDF008D8DDA /* JYBinderUtil.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderUtil.m; sourceTree = "<group>"; };
+		5654BBD31FE794BC008D8DDA /* JYBinderNode.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderNode.h; sourceTree = "<group>"; };
+		5654BBD41FE794BC008D8DDA /* JYBinderNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderNode.m; sourceTree = "<group>"; };
+		5654BBD61FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+JYBinderDeallocating.h"; sourceTree = "<group>"; };
+		5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYBinderDeallocating.m"; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		562E13341FE3AC21009C78AB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		562E132E1FE3AC21009C78AB = {
+			isa = PBXGroup;
+			children = (
+				562E13391FE3AC21009C78AB /* JYBinder */,
+				562E13381FE3AC21009C78AB /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		562E13381FE3AC21009C78AB /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				562E13371FE3AC21009C78AB /* libJYBinder.a */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		562E13391FE3AC21009C78AB /* JYBinder */ = {
+			isa = PBXGroup;
+			children = (
+				562E133A1FE3AC21009C78AB /* JYBinder.h */,
+				562E133B1FE3AC21009C78AB /* JYBinder.m */,
+				5654BBCD1FE75623008D8DDA /* JYBinderProxy.h */,
+				5654BBCE1FE75623008D8DDA /* JYBinderProxy.m */,
+				5654BBD01FE75EDF008D8DDA /* JYBinderUtil.h */,
+				5654BBD11FE75EDF008D8DDA /* JYBinderUtil.m */,
+				5654BBD31FE794BC008D8DDA /* JYBinderNode.h */,
+				5654BBD41FE794BC008D8DDA /* JYBinderNode.m */,
+				5654BBD61FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.h */,
+				5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */,
+			);
+			path = JYBinder;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		562E13361FE3AC21009C78AB /* JYBinder */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 562E13401FE3AC21009C78AB /* Build configuration list for PBXNativeTarget "JYBinder" */;
+			buildPhases = (
+				562E13331FE3AC21009C78AB /* Sources */,
+				562E13341FE3AC21009C78AB /* Frameworks */,
+				562E13351FE3AC21009C78AB /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = JYBinder;
+			productName = JYBinder;
+			productReference = 562E13371FE3AC21009C78AB /* libJYBinder.a */;
+			productType = "com.apple.product-type.library.static";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		562E132F1FE3AC21009C78AB /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0920;
+				ORGANIZATIONNAME = JY;
+				TargetAttributes = {
+					562E13361FE3AC21009C78AB = {
+						CreatedOnToolsVersion = 9.2;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 562E13321FE3AC21009C78AB /* Build configuration list for PBXProject "JYBinder" */;
+			compatibilityVersion = "Xcode 8.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 562E132E1FE3AC21009C78AB;
+			productRefGroup = 562E13381FE3AC21009C78AB /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				562E13361FE3AC21009C78AB /* JYBinder */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXSourcesBuildPhase section */
+		562E13331FE3AC21009C78AB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				562E133C1FE3AC21009C78AB /* JYBinder.m in Sources */,
+				5654BBCF1FE75623008D8DDA /* JYBinderProxy.m in Sources */,
+				5654BBD51FE794BC008D8DDA /* JYBinderNode.m in Sources */,
+				5654BBD21FE75EDF008D8DDA /* JYBinderUtil.m in Sources */,
+				5654BBD81FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin XCBuildConfiguration section */
+		562E133E1FE3AC21009C78AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+			};
+			name = Debug;
+		};
+		562E133F1FE3AC21009C78AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				SDKROOT = iphoneos;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		562E13411FE3AC21009C78AB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		562E13421FE3AC21009C78AB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				OTHER_LDFLAGS = "-ObjC";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		562E13321FE3AC21009C78AB /* Build configuration list for PBXProject "JYBinder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				562E133E1FE3AC21009C78AB /* Debug */,
+				562E133F1FE3AC21009C78AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		562E13401FE3AC21009C78AB /* Build configuration list for PBXNativeTarget "JYBinder" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				562E13411FE3AC21009C78AB /* Debug */,
+				562E13421FE3AC21009C78AB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 562E132F1FE3AC21009C78AB /* Project object */;
+}
