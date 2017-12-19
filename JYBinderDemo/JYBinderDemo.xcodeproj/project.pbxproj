@@ -17,7 +17,6 @@
 		562E13691FE3AC39009C78AB /* JYBinderDemoTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 562E13681FE3AC39009C78AB /* JYBinderDemoTests.m */; };
 		562E13741FE3AC39009C78AB /* JYBinderDemoUITests.m in Sources */ = {isa = PBXBuildFile; fileRef = 562E13731FE3AC39009C78AB /* JYBinderDemoUITests.m */; };
 		562E13831FE3B251009C78AB /* Person.m in Sources */ = {isa = PBXBuildFile; fileRef = 562E13821FE3B251009C78AB /* Person.m */; };
-		5654BBCC1FE3C346008D8DDA /* aaaaa.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBCB1FE3C346008D8DDA /* aaaaa.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,8 +57,6 @@
 		562E13751FE3AC39009C78AB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		562E13811FE3B251009C78AB /* Person.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Person.h; sourceTree = "<group>"; };
 		562E13821FE3B251009C78AB /* Person.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Person.m; sourceTree = "<group>"; };
-		5654BBCA1FE3C346008D8DDA /* aaaaa.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = aaaaa.h; sourceTree = "<group>"; };
-		5654BBCB1FE3C346008D8DDA /* aaaaa.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = aaaaa.m; sourceTree = "<group>"; };
 		D19A8CF1800196C6C3A851B3 /* libPods-JYBinderDemo.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-JYBinderDemo.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
@@ -125,8 +122,6 @@
 				562E135E1FE3AC38009C78AB /* main.m */,
 				562E13811FE3B251009C78AB /* Person.h */,
 				562E13821FE3B251009C78AB /* Person.m */,
-				5654BBCA1FE3C346008D8DDA /* aaaaa.h */,
-				5654BBCB1FE3C346008D8DDA /* aaaaa.m */,
 			);
 			path = JYBinderDemo;
 			sourceTree = "<group>";
@@ -320,7 +315,7 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-JYBinderDemo/Pods-JYBinderDemo-resources.sh",
-				"$PODS_CONFIGURATION_BUILD_DIR/JYLibrary/JYLibraryBundle.bundle",
+				$PODS_CONFIGURATION_BUILD_DIR/JYLibrary/JYLibraryBundle.bundle,
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
@@ -357,7 +352,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				562E13541FE3AC38009C78AB /* ViewController.m in Sources */,
-				5654BBCC1FE3C346008D8DDA /* aaaaa.m in Sources */,
 				562E135F1FE3AC38009C78AB /* main.m in Sources */,
 				562E13831FE3B251009C78AB /* Person.m in Sources */,
 				562E13511FE3AC38009C78AB /* AppDelegate.m in Sources */,

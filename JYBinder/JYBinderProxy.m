@@ -61,18 +61,37 @@
             [weak_self.safeMapTable setObject:nodeForKeyPathMapTable forKey:objectPointerValue];
         }
         JYBinderNode *oldNode = [nodeForKeyPathMapTable objectForKey:node.keyPath];
-        if (![JYBinderUtil isObjectNull:oldNode]) {
-            [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:(__bridge void *)oldNode];
-            [nodeForKeyPathMapTable removeObjectForKey:node.keyPath];
+        if ([JYBinderUtil isObjectNull:oldNode]) {
+            [nodeForKeyPathMapTable setObject:node forKey:node.keyPath];
+            
+            [node.object deallocDisposable:^(id deallocObject) {
+                [weak_self removeObserversForObject:deallocObject];
+            }];
+            
+            [node.object addObserver:weak_self forKeyPath:node.keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:(__bridge void *)node];
+        } else {
+            NSMutableSet *bindingNodes = [NSMutableSet setWithSet:oldNode.bindingNodes];
+            for (JYBinderNode *newBindingNode in node.bindingNodes) {
+                if ([JYBinderUtil isObjectNull:newBindingNode.object] || [JYBinderUtil isStringEmpty:newBindingNode.keyPath]) {
+                    continue;
+                }
+                BOOL found = NO;
+                for (JYBinderNode *oldBindingNode in oldNode.bindingNodes) {
+                    if ([JYBinderUtil isObjectNull:oldBindingNode.object] || [JYBinderUtil isStringEmpty:oldBindingNode.keyPath]) {
+                        continue;
+                    }
+                    if ((newBindingNode.object == oldBindingNode.object) &&
+                        [JYBinderUtil isEqualFromString:newBindingNode.keyPath toString:oldBindingNode.keyPath]) {
+                        found = YES;
+                        break;
+                    }
+                }
+                if (!found) {
+                    [bindingNodes addObject:newBindingNode];
+                }
+            }
+            [oldNode setBindingNodes:bindingNodes];
         }
-        
-        [nodeForKeyPathMapTable setObject:node forKey:node.keyPath];
-        
-        [node.object deallocDisposable:^(id deallocObject) {
-            [weak_self removeObserversForObject:deallocObject];
-        }];
-        
-        [node.object addObserver:weak_self forKeyPath:node.keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:(__bridge void *)node];
     });
 }
 

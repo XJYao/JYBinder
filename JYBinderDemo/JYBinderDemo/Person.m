@@ -10,8 +10,4 @@
 
 @implementation Person
 
-- (void)dealloc {
-    int i = 0;
-}
-
 @end

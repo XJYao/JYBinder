@@ -9,10 +9,12 @@
 #import "ViewController.h"
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
-#import <JYBinder/JYBinderProxy.h>
-#import "aaaaa.h"
-#import <objc/runtime.h>
-#import <ReactiveObjC/ReactiveObjC.h>
+
+//解绑
+//自定义setter时，需要实现setter方法并调用will和didchangevalue
+//不支持char *
+//考虑统一用一个nsset强引用关联node，各个node下用hashtable弱引用关联node
+
 
 @interface ViewController () <UITextFieldDelegate>
 
@@ -21,9 +23,6 @@
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 
 @property (nonatomic, strong) Person *person;
-//@property (nonatomic, strong) aaaaa *aaa;
-
-//@property (nonatomic, strong) JYBinder *binder;
 
 @end
 
@@ -37,24 +36,21 @@
     [self.nameTextField setDelegate:self];
     
     self.person = [[Person alloc] init];
-    
-//    self.binder = [[JYBinder alloc] init];
-//    [self.binder bindObject1:self.person property1:@"name" toObject2:self.nameLabel property2:@"text"];
-    
-//    dispatch_async(dispatch_queue_create("ddfd", DISPATCH_QUEUE_CONCURRENT), ^{
-//
-//    });
+ 
+    [JYBinder bindWithObjectsAndKeyPaths:
+     self.person, @"name",
+     self.nameLabel, @"text",
+     nil];
     
 //    [JYBinder bindWithObjectsAndKeyPaths:
 //     self.person, @"name",
+//     self.name2Label, @"text",
+//     nil];
+    
+//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:
 //     self.nameLabel, @"text",
 //     self.name2Label, @"text",
 //     nil];
-//    [self setAutomaticallyAdjustsScrollViewInsets:YES];
-    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:
-     self.nameLabel, @"text",
-     self.name2Label, @"text",
-     nil];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -63,20 +59,10 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
-//    [textField resignFirstResponder];
-//
-////    [self.nameTextField setText:textField.text];
-//    [self.person setName:textField.text];
-//    [self.nameLabel setText:textField.text];
-//    [self.person setHeight:4.6];
-//    [self.person setAge:64];
-//    [self.person setColor:[UIColor redColor]];
     return YES;
 }
 
 - (IBAction)drop:(id)sender {
-//    self.person = nil;
-//    [[JYBinderProxy sharedInstance] dsfdsf];
     [self.person setName:@"tom"];
 }
 - (IBAction)drop2:(id)sender {
