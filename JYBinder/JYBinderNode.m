@@ -21,7 +21,7 @@
     self = [super init];
     if (self) {
         _object = object;
-        _keyPath = [keyPath copy];
+        _keyPath = keyPath;
     }
     return self;
 }
@@ -29,7 +29,7 @@
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (context != (__bridge void *)self) {
+    if (object != self.object) {
         [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
         return;
     }
@@ -64,19 +64,9 @@
     id value = new;
     
     @synchronized (self) {
-        NSSet<JYBinderNode *> *bindingNodes = self.bindingNodes;
-        
-        NSMutableSet *validNodes = [[NSMutableSet alloc] initWithSet:bindingNodes];
-        
-        for (JYBinderNode *bindingNode in bindingNodes) {
-            if ([JYBinderUtil isObjectNull:bindingNode]) {
-                continue;
-            }
-            if ([JYBinderUtil isObjectNull:bindingNode.object]) {
-                [validNodes removeObject:bindingNode];
-                continue;
-            }
-            if ([JYBinderUtil isStringEmpty:bindingNode.keyPath]) {
+        for (JYBinderNode *bindingNode in self.bindingNodes) {
+            if ([JYBinderUtil isObjectNull:bindingNode.object] ||
+                [JYBinderUtil isStringEmpty:bindingNode.keyPath]) {
                 continue;
             }
             
@@ -180,10 +170,6 @@
                     ((void (*)(id, SEL, id))(void *)objc_msgSend)((id)bindingNode.object, setter, value);
                 } break;
             }
-        }
-        
-        if (validNodes.count != bindingNodes.count) {
-            [self setBindingNodes:validNodes];
         }
     }
 }

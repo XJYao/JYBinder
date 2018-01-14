@@ -37,20 +37,20 @@
     
     self.person = [[Person alloc] init];
  
-    [JYBinder bindWithObjectsAndKeyPaths:
-     self.person, @"name",
-     self.nameLabel, @"text",
-     nil];
+//    [JYBinder bindWithObjectsAndKeyPaths:
+//     self.person, @"name",
+//     self.nameLabel, @"text",
+//     nil];
     
 //    [JYBinder bindWithObjectsAndKeyPaths:
 //     self.person, @"name",
 //     self.name2Label, @"text",
 //     nil];
     
-//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:
-//     self.nameLabel, @"text",
-//     self.name2Label, @"text",
-//     nil];
+    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:
+     self.nameLabel, @"text",
+     self.name2Label, @"text",
+     nil];
 }
 
 - (void)didReceiveMemoryWarning {

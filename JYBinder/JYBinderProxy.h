@@ -16,8 +16,10 @@
 
 - (void)addObserverForNode:(JYBinderNode *)node;
 
-- (void)removeObserverForObject:(NSObject *)object keyPath:(NSString *)keyPath;
+- (void)addBindedNode:(JYBinderNode *)node;
 
-- (void)removeObserversForObject:(NSObject *)object;
+//- (void)removeObserverForObject:(NSObject *)object keyPath:(NSString *)keyPath;
+//
+//- (void)removeObserversForObject:(NSObject *)object;
 
 @end

@@ -14,7 +14,9 @@
 
 @property (nonatomic, copy, readonly) NSString *keyPath;
 
-@property (nonatomic, strong) NSSet<JYBinderNode *> *bindingNodes;
+@property (nonatomic, copy) void (^valueChangedCustomBlock)(void);
+
+@property (nonatomic, strong) NSHashTable<JYBinderNode *> *bindingNodes;
 
 - (instancetype)initWithObject:(__weak NSObject *)object keyPath:(NSString *)keyPath;
 

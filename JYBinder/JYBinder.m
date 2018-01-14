@@ -14,15 +14,15 @@
 @implementation JYBinder
 
 + (void)bindWithObjectsAndKeyPaths:(id)object1, ... {
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    NSMutableArray *keyPaths = [[NSMutableArray alloc] init];
+    NSMutableArray *objects = [NSMutableArray array];
+    NSMutableArray *keyPaths = [NSMutableArray array];
     
     va_list args;
     va_start(args, object1);
     {
         NSUInteger paramIndex = 0;
         
-        for (id otherObject = object1; otherObject; otherObject = va_arg(args, id)) {
+        for (id otherObject = object1; ![JYBinderUtil isObjectNull:otherObject]; otherObject = va_arg(args, id)) {
             
             if (paramIndex % 2 == 0) {
                 [objects addObject:otherObject];
@@ -50,7 +50,10 @@
     }
     
     for (JYBinderNode *node in nodes) {
-        NSMutableSet *bindingNodes = [nodes mutableCopy];
+        NSHashTable *bindingNodes = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
+        for (JYBinderNode *bindingNode in nodes) {
+            [bindingNodes addObject:bindingNode];
+        }
         [bindingNodes removeObject:node];
         [node setBindingNodes:bindingNodes];
         
@@ -63,15 +66,15 @@
         return;
     }
     
-    NSMutableArray *objects = [[NSMutableArray alloc] init];
-    NSMutableArray *keyPaths = [[NSMutableArray alloc] init];
+    NSMutableArray *objects = [NSMutableArray array];
+    NSMutableArray *keyPaths = [NSMutableArray array];
     
     va_list args;
     va_start(args, object1);
     {
         NSUInteger paramIndex = 0;
         
-        for (id otherObject = object1; otherObject; otherObject = va_arg(args, id)) {
+        for (id otherObject = object1; ![JYBinderUtil isObjectNull:otherObject]; otherObject = va_arg(args, id)) {
             
             if (paramIndex % 2 == 0) {
                 [objects addObject:otherObject];
@@ -84,7 +87,7 @@
     }
     va_end(args);
     
-    NSMutableSet *nodes = [NSMutableSet setWithCapacity:objects.count];
+    NSHashTable *nodes = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
     for (NSInteger i = 0; i < objects.count; i ++) {
         id object = [objects objectAtIndex:i];
         id keyPath = nil;
@@ -96,6 +99,8 @@
         }
         JYBinderNode *node = [[JYBinderNode alloc] initWithObject:object keyPath:keyPath];
         [nodes addObject:node];
+        
+        [[JYBinderProxy sharedInstance] addBindedNode:node];
     }
     
     JYBinderNode *sourceNode = [[JYBinderNode alloc] initWithObject:sourceObject keyPath:sourceKeyPath];
