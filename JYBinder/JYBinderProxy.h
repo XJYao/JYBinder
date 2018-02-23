@@ -14,12 +14,12 @@
 
 + (instancetype)sharedInstance;
 
-- (JYBinderNode *)addObserverForObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+- (JYBinderNode *)addObserverForObject:(NSObject *)object keyPath:(NSString *)keyPath;
 
-- (JYBinderNode *)addBindedWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+- (JYBinderNode *)addBindedWithObject:(NSObject *)object keyPath:(NSString *)keyPath;
 
-- (void)removeWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+- (void)removeWithObject:(NSObject *)object keyPath:(NSString *)keyPath;
 
-- (void)removeWithObject:(NSObject *__weak)object;
+- (void)removeWithObject:(NSObject *)object;
 
 @end

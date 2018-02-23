@@ -37,7 +37,7 @@
     return self;
 }
 
-- (JYBinderNode *)addObserverForObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
+- (JYBinderNode *)addObserverForObject:(NSObject *)object keyPath:(NSString *)keyPath {
     if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
         return nil;
     }
@@ -52,7 +52,7 @@
     return node;
 }
 
-- (JYBinderNode *)addBindedWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
+- (JYBinderNode *)addBindedWithObject:(NSObject *)object keyPath:(NSString *)keyPath {
     if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
         return nil;
     }
@@ -67,7 +67,7 @@
     return node;
 }
 
-- (JYBinderNode *)addObject:(NSObject *__weak)object keyPath:(NSString *)keyPath isObserver:(BOOL)isObserver {
+- (JYBinderNode *)addObject:(NSObject *)object keyPath:(NSString *)keyPath isObserver:(BOOL)isObserver {
     NSMutableDictionary *nodeForKeyPathDict = [self.nodeMapTable objectForKey:object];
     if ([JYBinderUtil isObjectNull:nodeForKeyPathDict]) {
         nodeForKeyPathDict = [NSMutableDictionary dictionary];
@@ -89,7 +89,7 @@
     return oldNode;
 }
 
-- (void)removeWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
+- (void)removeWithObject:(NSObject *)object keyPath:(NSString *)keyPath {
     if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
         return;
     }
@@ -111,7 +111,7 @@
     });
 }
 
-- (void)removeWithObject:(NSObject *__weak)object {
+- (void)removeWithObject:(NSObject *)object {
     if ([JYBinderUtil isObjectNull:object]) {
         return;
     }
