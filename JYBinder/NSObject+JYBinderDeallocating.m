@@ -7,6 +7,7 @@
 //
 
 #import "NSObject+JYBinderDeallocating.h"
+#import "JYBinderUtil.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
 
@@ -22,7 +23,7 @@ static NSMutableSet *swizzledClasses() {
     return swizzledClasses;
 }
 
-static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(id deallocObject)) {
+static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(void)) {
     @synchronized (swizzledClasses()) {
         NSString *className = NSStringFromClass(classToSwizzle);
         if ([swizzledClasses() containsObject:className]) return;
@@ -33,7 +34,7 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(id
         
         id newDealloc = ^(__unsafe_unretained id self) {
             if (deallocBlock) {
-                deallocBlock(self);
+                deallocBlock();
             }
             
             if (originalDealloc == NULL) {
@@ -67,10 +68,30 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(id
     }
 }
 
-- (void)deallocDisposable:(void (^)(id))block {
+- (void)removeObserverWhenDealloc:(NSObject *)observer {
     @synchronized (self) {
-        swizzleDeallocIfNeeded(self.class, block);
+        swizzleDeallocIfNeeded(self.class, ^(void) {
+            for (NSString *keyPath in self.registeredKeyPaths) {
+                [self removeObserver:observer forKeyPath:keyPath];
+            }
+            [self.registeredKeyPaths removeAllObjects];
+        });
     }
+}
+
+static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
+
+- (void)setRegisteredKeyPaths:(NSMutableSet *)registeredKeyPaths {
+    objc_setAssociatedObject(self, RegisteredKeyPathsKey, registeredKeyPaths, OBJC_ASSOCIATION_RETAIN);
+}
+
+- (NSMutableSet *)registeredKeyPaths {
+    NSMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
+    if ([JYBinderUtil isObjectNull:obj]) {
+        obj = [NSMutableSet set];
+        [self setRegisteredKeyPaths:obj];
+    }
+    return obj;
 }
 
 @end

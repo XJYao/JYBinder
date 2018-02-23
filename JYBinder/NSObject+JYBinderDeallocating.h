@@ -10,6 +10,8 @@
 
 @interface NSObject (JYBinderDeallocating)
 
-- (void)deallocDisposable:(void (^)(id deallocObject))block;
+@property (nonatomic, strong) NSMutableSet *registeredKeyPaths;
+
+- (void)removeObserverWhenDealloc:(NSObject *)observer;
 
 @end

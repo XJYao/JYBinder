@@ -13,7 +13,6 @@
 //解绑
 //自定义setter时，需要实现setter方法并调用will和didchangevalue
 //不支持char *
-//考虑统一用一个nsset强引用关联node，各个node下用hashtable弱引用关联node
 
 
 @interface ViewController () <UITextFieldDelegate>

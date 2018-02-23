@@ -9,6 +9,7 @@
 #import "JYBinderProxy.h"
 #import "JYBinderUtil.h"
 #import "JYBinderNode.h"
+#import "NSObject+JYBinderDeallocating.h"
 
 @interface JYBinderProxy ()
 
@@ -81,9 +82,11 @@
         [nodeForKeyPathDict setObject:oldNode forKey:keyPath];
     }
     
-    if (isObserver && !oldNode.isRegisteredAsAnObserver) {
+    if (isObserver && ![object.registeredKeyPaths containsObject:keyPath]) {
         [object addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:NULL];
-        [oldNode setIsRegisteredAsAnObserver:YES];
+        
+        [object.registeredKeyPaths addObject:keyPath];
+        [object removeObserverWhenDealloc:self];
     }
     
     return oldNode;
@@ -99,9 +102,9 @@
         NSMutableDictionary *nodeForKeyPathDict = [weak_self.nodeMapTable objectForKey:object];
         JYBinderNode *oldNode = [nodeForKeyPathDict objectForKey:keyPath];
         if (![JYBinderUtil isObjectNull:oldNode]) {
-            if (oldNode.isRegisteredAsAnObserver) {
+            if ([object.registeredKeyPaths containsObject:oldNode.keyPath]) {
                 [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
-                [oldNode setIsRegisteredAsAnObserver:NO];
+                [object.registeredKeyPaths removeObject:oldNode.keyPath];
             }
             [nodeForKeyPathDict removeObjectForKey:keyPath];
         }
@@ -121,9 +124,9 @@
         NSMutableDictionary *nodeForKeyPathDict = [weak_self.nodeMapTable objectForKey:object];
         for (JYBinderNode *oldNode in nodeForKeyPathDict.allValues) {
             if (![JYBinderUtil isObjectNull:oldNode]) {
-                if (oldNode.isRegisteredAsAnObserver) {
+                if ([object.registeredKeyPaths containsObject:oldNode.keyPath]) {
                     [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
-                    [oldNode setIsRegisteredAsAnObserver:NO];
+                    [object.registeredKeyPaths removeObject:oldNode.keyPath];
                 }
             }
         }

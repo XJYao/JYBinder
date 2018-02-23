@@ -14,8 +14,6 @@
 
 @property (nonatomic, copy, readonly) NSString *keyPath;
 
-@property (nonatomic, assign) BOOL isRegisteredAsAnObserver;
-
 @property (nonatomic, strong, readonly) NSHashTable<JYBinderNode *> *bindingNodes;
 
 - (instancetype)initWithObject:(__weak NSObject *)object keyPath:(NSString *)keyPath;

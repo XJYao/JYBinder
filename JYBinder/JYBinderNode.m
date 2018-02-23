@@ -22,7 +22,6 @@
     if (self) {
         _object = object;
         _keyPath = keyPath;
-        _isRegisteredAsAnObserver = NO;
         _bindingNodes = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
     }
     return self;
