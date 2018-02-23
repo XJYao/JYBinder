@@ -9,12 +9,11 @@
 #import "JYBinderProxy.h"
 #import "JYBinderUtil.h"
 #import "JYBinderNode.h"
-//#import "NSObject+JYBinderDeallocating.h"
 
 @interface JYBinderProxy ()
 
-@property (nonatomic, strong) NSMapTable/* object, NSDictionary *<keyPath, node> */ *binderMapTable;
-@property (nonatomic, strong) NSMapTable/* object, NSDictionary *<keyPath, node> */ *bindedMapTable;
+@property (nonatomic, strong) NSMapTable/* object, NSDictionary *<keyPath, node> */ *nodeMapTable;
+
 @property (nonatomic, strong) dispatch_queue_t queue;
 
 @end
@@ -38,98 +37,97 @@
     return self;
 }
 
-- (void)addObserverForNode:(JYBinderNode *)node {
-    if ([JYBinderUtil isObjectNull:node] || [JYBinderUtil isObjectNull:node.object] || [JYBinderUtil isStringEmpty:node.keyPath]) {
-        return;
+- (JYBinderNode *)addObserverForObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
+    if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
+        return nil;
     }
+    
+    __block JYBinderNode *node = nil;
 
     __weak typeof(self) weak_self = self;
-    
     dispatch_sync(self.queue, ^{
-        NSMutableDictionary *nodeForKeyPathDict = [weak_self.binderMapTable objectForKey:node.object];
-        if ([JYBinderUtil isObjectNull:nodeForKeyPathDict]) {
-            nodeForKeyPathDict = [NSMutableDictionary dictionary];
-            [weak_self.binderMapTable setObject:nodeForKeyPathDict forKey:node.object];
-        }
-        JYBinderNode *oldNode = [nodeForKeyPathDict objectForKey:node.keyPath];
-        if ([JYBinderUtil isObjectNull:oldNode]) {
-            [nodeForKeyPathDict setObject:node forKey:node.keyPath];
-            
-            [node.object addObserver:weak_self forKeyPath:node.keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:NULL];
-        } else if (oldNode != node) {
-            NSMutableSet *newBindingNodes = [NSMutableSet set];
-            for (JYBinderNode *newBindingNode in node.bindingNodes) {
-                if ([JYBinderUtil isObjectNull:newBindingNode.object] || [JYBinderUtil isStringEmpty:newBindingNode.keyPath]) {
-                    continue;
-                }
-                BOOL found = NO;
-                for (JYBinderNode *oldBindingNode in oldNode.bindingNodes) {
-                    if ([JYBinderUtil isObjectNull:oldBindingNode.object] || [JYBinderUtil isStringEmpty:oldBindingNode.keyPath]) {
-                        continue;
-                    }
-                    if ((newBindingNode.object == oldBindingNode.object) &&
-                        [JYBinderUtil isEqualFromString:newBindingNode.keyPath toString:oldBindingNode.keyPath]) {
-                        found = YES;
-                        break;
-                    }
-                }
-                if (!found) {
-                    [newBindingNodes addObject:newBindingNode];
-                }
-            }
-            for (JYBinderNode *newBindingNode in newBindingNodes) {
-                [oldNode.bindingNodes addObject:newBindingNode];
-            }
-        }
+        node = [weak_self addObject:object keyPath:keyPath isObserver:YES];
     });
+    
+    return node;
 }
 
-- (void)addBindedNode:(JYBinderNode *)node {
-    if ([JYBinderUtil isObjectNull:node] || [JYBinderUtil isObjectNull:node.object] || [JYBinderUtil isStringEmpty:node.keyPath]) {
-        return;
+- (JYBinderNode *)addBindedWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
+    if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
+        return nil;
     }
     
-    NSMutableDictionary *nodeForKeyPathDict = [self.bindedMapTable objectForKey:node.object];
+    __block JYBinderNode *node = nil;
+    
+    __weak typeof(self) weak_self = self;
+    dispatch_sync(self.queue, ^{
+        node = [weak_self addObject:object keyPath:keyPath isObserver:NO];
+    });
+    
+    return node;
+}
+
+- (JYBinderNode *)addObject:(NSObject *__weak)object keyPath:(NSString *)keyPath isObserver:(BOOL)isObserver {
+    NSMutableDictionary *nodeForKeyPathDict = [self.nodeMapTable objectForKey:object];
     if ([JYBinderUtil isObjectNull:nodeForKeyPathDict]) {
         nodeForKeyPathDict = [NSMutableDictionary dictionary];
-        [self.bindedMapTable setObject:nodeForKeyPathDict forKey:node.object];
+        [self.nodeMapTable setObject:nodeForKeyPathDict forKey:object];
     }
-    [nodeForKeyPathDict setObject:node forKey:node.keyPath];
+    JYBinderNode *oldNode = [nodeForKeyPathDict objectForKey:keyPath];
+    
+    if ([JYBinderUtil isObjectNull:oldNode]) {
+        oldNode = [[JYBinderNode alloc] initWithObject:object keyPath:keyPath];
+        
+        [nodeForKeyPathDict setObject:oldNode forKey:keyPath];
+    }
+    
+    if (isObserver && !oldNode.isRegisteredAsAnObserver) {
+        [object addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:NULL];
+        [oldNode setIsRegisteredAsAnObserver:YES];
+    }
+    
+    return oldNode;
 }
 
-- (void)removeObserverForObject:(NSObject *)object keyPath:(NSString *)keyPath {
+- (void)removeWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath {
     if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
         return;
     }
     __weak typeof(self) weak_self = self;
 
     dispatch_sync(self.queue, ^{
-        NSMutableDictionary *nodeForKeyPathDict = [weak_self.binderMapTable objectForKey:object];
+        NSMutableDictionary *nodeForKeyPathDict = [weak_self.nodeMapTable objectForKey:object];
         JYBinderNode *oldNode = [nodeForKeyPathDict objectForKey:keyPath];
         if (![JYBinderUtil isObjectNull:oldNode]) {
-            [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+            if (oldNode.isRegisteredAsAnObserver) {
+                [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+                [oldNode setIsRegisteredAsAnObserver:NO];
+            }
             [nodeForKeyPathDict removeObjectForKey:keyPath];
         }
         if (nodeForKeyPathDict.count == 0) {
-            [weak_self.binderMapTable removeObjectForKey:object];
+            [weak_self.nodeMapTable removeObjectForKey:object];
         }
     });
 }
 
-- (void)removeObserversForObject:(NSObject *)object {
+- (void)removeWithObject:(NSObject *__weak)object {
     if ([JYBinderUtil isObjectNull:object]) {
         return;
     }
     __weak typeof(self) weak_self = self;
 
     dispatch_sync(self.queue, ^{
-        NSMutableDictionary *nodeForKeyPathDict = [weak_self.binderMapTable objectForKey:object];
+        NSMutableDictionary *nodeForKeyPathDict = [weak_self.nodeMapTable objectForKey:object];
         for (JYBinderNode *oldNode in nodeForKeyPathDict.allValues) {
             if (![JYBinderUtil isObjectNull:oldNode]) {
-                [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+                if (oldNode.isRegisteredAsAnObserver) {
+                    [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+                    [oldNode setIsRegisteredAsAnObserver:NO];
+                }
             }
         }
-        [weak_self.binderMapTable removeObjectForKey:object];
+        [weak_self.nodeMapTable removeObjectForKey:object];
     });
 }
 
@@ -140,7 +138,7 @@
     __weak typeof(self) weak_self = self;
     
     dispatch_sync(self.queue, ^{
-        NSMutableDictionary *nodeForKeyPathDict = [weak_self.binderMapTable objectForKey:object];
+        NSMutableDictionary *nodeForKeyPathDict = [weak_self.nodeMapTable objectForKey:object];
         node = [nodeForKeyPathDict objectForKey:keyPath];
     });
     
@@ -151,18 +149,11 @@
 
 #pragma mark - lazy
 
-- (NSMapTable *)binderMapTable {
-    if (!_binderMapTable) {
-        _binderMapTable = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory capacity:0];
+- (NSMapTable *)nodeMapTable {
+    if (!_nodeMapTable) {
+        _nodeMapTable = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory capacity:0];
     }
-    return _binderMapTable;
-}
-
-- (NSMapTable *)bindedMapTable {
-    if (!_bindedMapTable) {
-        _bindedMapTable = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory capacity:0];
-    }
-    return _bindedMapTable;
+    return _nodeMapTable;
 }
 
 @end

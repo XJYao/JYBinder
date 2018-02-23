@@ -22,7 +22,11 @@
 @property (weak, nonatomic) IBOutlet UILabel *name2Label;
 @property (weak, nonatomic) IBOutlet UITextField *nameTextField;
 
-@property (nonatomic, strong) Person *person;
+@property (weak, nonatomic) IBOutlet UIButton *button1;
+@property (weak, nonatomic) IBOutlet UIButton *button2;
+
+@property (nonatomic, strong) Person *person1;
+@property (nonatomic, strong) Person *person2;
 
 @end
 
@@ -35,22 +39,22 @@
     
     [self.nameTextField setDelegate:self];
     
-    self.person = [[Person alloc] init];
- 
-//    [JYBinder bindWithObjectsAndKeyPaths:
-//     self.person, @"name",
-//     self.nameLabel, @"text",
-//     nil];
+    self.person1 = [[Person alloc] init];
+    self.person2 = [[Person alloc] init];
     
-//    [JYBinder bindWithObjectsAndKeyPaths:
-//     self.person, @"name",
-//     self.name2Label, @"text",
-//     nil];
-    
-    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:
+    [JYBinder bindWithObjectsAndKeyPaths:
+     self.person1, @"name",
      self.nameLabel, @"text",
      self.name2Label, @"text",
      nil];
+    
+    [JYBinder bindSourceObject:self.person2 sourceKeyPath:@"name" toObjectsAndKeyPaths:
+     self.nameLabel, @"text",
+     self.name2Label, @"text",
+     nil];
+    
+    [self.person1 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+    [self.person2 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -59,15 +63,24 @@
 }
 
 - (BOOL)textFieldShouldReturn:(UITextField *)textField {
+    [self.nameLabel setText:textField.text];
     return YES;
 }
 
 - (IBAction)drop:(id)sender {
-    [self.person setName:@"tom"];
+    [self.person1 setName:@"tom"];
 }
+
 - (IBAction)drop2:(id)sender {
-    [self.nameLabel setText:@"nick"];
-    NSLog(@"person name = %@", self.person.name);
+    [self.person2 setName:@"nick"];
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+    if (object == self.person1) {
+        [self.button1 setTitle:self.person1.name forState:UIControlStateNormal];
+    } else if (object == self.person2) {
+        [self.button2 setTitle:self.person2.name forState:UIControlStateNormal];
+    }
 }
 
 @end

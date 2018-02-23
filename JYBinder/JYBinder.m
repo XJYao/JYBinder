@@ -45,19 +45,16 @@
         if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
             continue;
         }
-        JYBinderNode *node = [[JYBinderNode alloc] initWithObject:object keyPath:keyPath];
+        JYBinderNode *node = [[JYBinderProxy sharedInstance] addObserverForObject:object keyPath:keyPath];
         [nodes addObject:node];
     }
     
     for (JYBinderNode *node in nodes) {
-        NSHashTable *bindingNodes = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
         for (JYBinderNode *bindingNode in nodes) {
-            [bindingNodes addObject:bindingNode];
+            if (bindingNode != node) {
+                [node.bindingNodes addObject:bindingNode];
+            }
         }
-        [bindingNodes removeObject:node];
-        [node setBindingNodes:bindingNodes];
-        
-        [[JYBinderProxy sharedInstance] addObserverForNode:node];
     }
 }
 
@@ -87,7 +84,8 @@
     }
     va_end(args);
     
-    NSHashTable *nodes = [NSHashTable hashTableWithOptions:NSPointerFunctionsWeakMemory];
+    JYBinderNode *sourceNode = [[JYBinderProxy sharedInstance] addObserverForObject:sourceObject keyPath:sourceKeyPath];
+    
     for (NSInteger i = 0; i < objects.count; i ++) {
         id object = [objects objectAtIndex:i];
         id keyPath = nil;
@@ -97,16 +95,9 @@
         if ([JYBinderUtil isObjectNull:object] || [JYBinderUtil isStringEmpty:keyPath]) {
             continue;
         }
-        JYBinderNode *node = [[JYBinderNode alloc] initWithObject:object keyPath:keyPath];
-        [nodes addObject:node];
-        
-        [[JYBinderProxy sharedInstance] addBindedNode:node];
+        JYBinderNode *bindingNode = [[JYBinderProxy sharedInstance] addBindedWithObject:object keyPath:keyPath];
+        [sourceNode.bindingNodes addObject:bindingNode];
     }
-    
-    JYBinderNode *sourceNode = [[JYBinderNode alloc] initWithObject:sourceObject keyPath:sourceKeyPath];
-    [sourceNode setBindingNodes:nodes];
-    
-    [[JYBinderProxy sharedInstance] addObserverForNode:sourceNode];
 }
 
 @end
