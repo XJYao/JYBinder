@@ -16,6 +16,6 @@
 
 @property (nonatomic, strong, readonly) NSHashTable<JYBinderNode *> *bindingNodes;
 
-- (instancetype)initWithObject:(__weak NSObject *)object keyPath:(NSString *)keyPath;
+- (instancetype)initWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
 
 @end
