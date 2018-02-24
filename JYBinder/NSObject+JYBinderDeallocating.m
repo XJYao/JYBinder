@@ -10,7 +10,6 @@
 #import "JYBinderUtil.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
-#import <JYLibrary/JYLibrary.h>
 
 @implementation NSObject (JYBinderDeallocating)
 

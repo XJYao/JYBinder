@@ -10,7 +10,6 @@
 #import "JYBinderUtil.h"
 #import "JYBinderNode.h"
 #import "NSObject+JYBinderDeallocating.h"
-#import <objc/runtime.h>
 
 @interface JYBinderProxy ()
 
