@@ -14,4 +14,8 @@
 
 + (void)bindSourceObject:(id)sourceObject sourceKeyPath:(NSString *)sourceKeyPath toObjectsAndKeyPaths:(id)object1, ... NS_REQUIRES_NIL_TERMINATION;
 
++ (void)unbindWithObjectsAndKeyPaths:(id)object1, ... NS_REQUIRES_NIL_TERMINATION;
+
++ (void)unbindObject:(id)object keyPath:(NSString *)keyPath;
+
 @end

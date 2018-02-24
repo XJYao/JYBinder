@@ -100,4 +100,12 @@
     }
 }
 
++ (void)unbindWithObjectsAndKeyPaths:(id)object1, ... {
+    
+}
+
++ (void)unbindObject:(id)object keyPath:(NSString *)keyPath {
+    
+}
+
 @end
