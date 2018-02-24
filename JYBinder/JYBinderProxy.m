@@ -10,6 +10,7 @@
 #import "JYBinderUtil.h"
 #import "JYBinderNode.h"
 #import "NSObject+JYBinderDeallocating.h"
+#import <objc/runtime.h>
 
 @interface JYBinderProxy ()
 
@@ -83,10 +84,18 @@
     }
     
     if (isObserver && ![object.registeredKeyPaths containsObject:keyPath]) {
-        [object addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:NULL];
+        [object addObserver:self forKeyPath:keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:(__bridge void *)self];
         
         [object.registeredKeyPaths addObject:keyPath];
-        [object removeObserverWhenDealloc:self];
+        
+        __weak typeof(self) weak_self = self;
+        
+        object.removeObserverWhenDeallocBlock = ^(NSObject *deallocObject) {
+            for (NSString *keyPath in deallocObject.registeredKeyPaths) {
+                [deallocObject removeObserver:weak_self forKeyPath:keyPath context:(__bridge void *)weak_self];
+            }
+            [deallocObject.registeredKeyPaths removeAllObjects];
+        };
     }
     
     return oldNode;
@@ -103,7 +112,7 @@
         JYBinderNode *oldNode = [nodeForKeyPathDict objectForKey:keyPath];
         if (![JYBinderUtil isObjectNull:oldNode]) {
             if ([object.registeredKeyPaths containsObject:oldNode.keyPath]) {
-                [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+                [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:(__bridge void *)weak_self];
                 [object.registeredKeyPaths removeObject:oldNode.keyPath];
             }
             [nodeForKeyPathDict removeObjectForKey:keyPath];
@@ -125,7 +134,7 @@
         for (JYBinderNode *oldNode in nodeForKeyPathDict.allValues) {
             if (![JYBinderUtil isObjectNull:oldNode]) {
                 if ([object.registeredKeyPaths containsObject:oldNode.keyPath]) {
-                    [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:NULL];
+                    [oldNode.object removeObserver:weak_self forKeyPath:oldNode.keyPath context:(__bridge void *)weak_self];
                     [object.registeredKeyPaths removeObject:oldNode.keyPath];
                 }
             }

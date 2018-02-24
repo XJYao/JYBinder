@@ -10,6 +10,7 @@
 #import "JYBinderUtil.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
+#import <JYLibrary/JYLibrary.h>
 
 @implementation NSObject (JYBinderDeallocating)
 
@@ -23,7 +24,7 @@ static NSMutableSet *swizzledClasses() {
     return swizzledClasses;
 }
 
-static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(void)) {
+static void swizzleDeallocIfNeeded(Class classToSwizzle) {
     @synchronized (swizzledClasses()) {
         NSString *className = NSStringFromClass(classToSwizzle);
         if ([swizzledClasses() containsObject:className]) return;
@@ -33,8 +34,8 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(vo
         __block void (*originalDealloc)(__unsafe_unretained id, SEL) = NULL;
         
         id newDealloc = ^(__unsafe_unretained id self) {
-            if (deallocBlock) {
-                deallocBlock();
+            if (((NSObject *)self).removeObserverWhenDeallocBlock) {
+                ((NSObject *)self).removeObserverWhenDeallocBlock(self);
             }
             
             if (originalDealloc == NULL) {
@@ -68,17 +69,6 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle, void (^deallocBlock)(vo
     }
 }
 
-- (void)removeObserverWhenDealloc:(NSObject *)observer {
-    @synchronized (self) {
-        swizzleDeallocIfNeeded(self.class, ^(void) {
-            for (NSString *keyPath in self.registeredKeyPaths) {
-                [self removeObserver:observer forKeyPath:keyPath];
-            }
-            [self.registeredKeyPaths removeAllObjects];
-        });
-    }
-}
-
 static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
 
 - (void)setRegisteredKeyPaths:(NSMutableSet *)registeredKeyPaths {
@@ -92,6 +82,19 @@ static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
         [self setRegisteredKeyPaths:obj];
     }
     return obj;
+}
+
+static const void *RemoveObserverWhenDeallocBlockKey = &RemoveObserverWhenDeallocBlockKey;
+
+- (void)setRemoveObserverWhenDeallocBlock:(void (^)(NSObject *))removeObserverWhenDeallocBlock {
+    @synchronized (self) {
+        swizzleDeallocIfNeeded(self.class);
+        objc_setAssociatedObject(self, RemoveObserverWhenDeallocBlockKey, removeObserverWhenDeallocBlock, OBJC_ASSOCIATION_RETAIN);
+    }
+}
+
+- (void (^)(NSObject *))removeObserverWhenDeallocBlock {
+    return objc_getAssociatedObject(self, RemoveObserverWhenDeallocBlockKey);
 }
 
 @end

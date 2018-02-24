@@ -9,7 +9,7 @@
 #import "ViewController.h"
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
-
+#import <JYBinder/NSObject+JYBinderDeallocating.h>
 //解绑
 //自定义setter时，需要实现setter方法并调用will和didchangevalue
 //不支持char *
@@ -52,8 +52,8 @@
      self.name2Label, @"text",
      nil];
     
-    [self.person1 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
-    [self.person2 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+//    [self.person1 addObserver:self forKeyPath:@"color" options:NSKeyValueObservingOptionNew context:NULL];
+//    [self.person2 addObserver:self forKeyPath:@"color" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -68,10 +68,12 @@
 
 - (IBAction)drop:(id)sender {
     [self.person1 setName:@"tom"];
+//    self.person1 = nil;
 }
 
 - (IBAction)drop2:(id)sender {
     [self.person2 setName:@"nick"];
+//    self.person2  = nil;
 }
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {

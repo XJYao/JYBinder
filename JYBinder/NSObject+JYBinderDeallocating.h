@@ -12,6 +12,6 @@
 
 @property (nonatomic, strong) NSMutableSet *registeredKeyPaths;
 
-- (void)removeObserverWhenDealloc:(NSObject *)observer;
+@property (nonatomic, copy) void (^removeObserverWhenDeallocBlock)(NSObject *deallocObject);
 
 @end
