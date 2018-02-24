@@ -9,7 +9,7 @@
 #import "JYBinderNode.h"
 #import <objc/message.h>
 #import "JYBinderUtil.h"
-#import <JYLibrary/JYLibrary.h>
+#import "JYBinderPropertyInfo.h"
 
 @interface JYBinderNode ()
 
@@ -86,7 +86,7 @@
             
             for (int i = 0; i < propertiesCount; i++) {
                 objc_property_t property = properties[i];
-                XPropertyInfo *propertyInfo = [[XPropertyInfo alloc] initWithProperty:property];
+                JYBinderPropertyInfo *propertyInfo = [[JYBinderPropertyInfo alloc] initWithProperty:property];
                 if (![JYBinderUtil isEqualFromString:propertyInfo.name toString:bindingNode.keyPath]) {
                     continue;
                 }

@@ -2,5 +2,4 @@ platform :ios, '8.0'
 
 target 'JYBinderDemo' do
     pod 'JYBinder', :path => '../'
-    pod 'JYLibrary', :path => '../../JYLibrary'
 end
