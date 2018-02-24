@@ -34,6 +34,7 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
         __block void (*originalDealloc)(__unsafe_unretained id, SEL) = NULL;
         
         id newDealloc = ^(__unsafe_unretained id self) {
+            
             if (((NSObject *)self).removeObserverWhenDeallocBlock) {
                 ((NSObject *)self).removeObserverWhenDeallocBlock(self);
             }
