@@ -13,7 +13,7 @@
 		5654BBD21FE75EDF008D8DDA /* JYBinderUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD11FE75EDF008D8DDA /* JYBinderUtil.m */; };
 		5654BBD51FE794BC008D8DDA /* JYBinderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD41FE794BC008D8DDA /* JYBinderNode.m */; };
 		5654BBD81FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */; };
-		56E7594F2041457C00B0972E /* JYPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 56E7594E2041457C00B0972E /* JYPropertyInfo.m */; };
+		56F153202045496000B35165 /* JYBinderPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 56F1531F2045496000B35165 /* JYBinderPropertyInfo.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -41,8 +41,8 @@
 		5654BBD41FE794BC008D8DDA /* JYBinderNode.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderNode.m; sourceTree = "<group>"; };
 		5654BBD61FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "NSObject+JYBinderDeallocating.h"; sourceTree = "<group>"; };
 		5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYBinderDeallocating.m"; sourceTree = "<group>"; };
-		56E7594D2041457C00B0972E /* JYPropertyInfo.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYPropertyInfo.h; sourceTree = "<group>"; };
-		56E7594E2041457C00B0972E /* JYPropertyInfo.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYPropertyInfo.m; sourceTree = "<group>"; };
+		56F1531E2045496000B35165 /* JYBinderPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderPropertyInfo.h; sourceTree = "<group>"; };
+		56F1531F2045496000B35165 /* JYBinderPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderPropertyInfo.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -79,14 +79,14 @@
 				562E133B1FE3AC21009C78AB /* JYBinder.m */,
 				5654BBCD1FE75623008D8DDA /* JYBinderProxy.h */,
 				5654BBCE1FE75623008D8DDA /* JYBinderProxy.m */,
+				56F1531E2045496000B35165 /* JYBinderPropertyInfo.h */,
+				56F1531F2045496000B35165 /* JYBinderPropertyInfo.m */,
 				5654BBD01FE75EDF008D8DDA /* JYBinderUtil.h */,
 				5654BBD11FE75EDF008D8DDA /* JYBinderUtil.m */,
 				5654BBD31FE794BC008D8DDA /* JYBinderNode.h */,
 				5654BBD41FE794BC008D8DDA /* JYBinderNode.m */,
 				5654BBD61FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.h */,
 				5654BBD71FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m */,
-				56E7594D2041457C00B0972E /* JYPropertyInfo.h */,
-				56E7594E2041457C00B0972E /* JYPropertyInfo.m */,
 			);
 			path = JYBinder;
 			sourceTree = "<group>";
@@ -149,11 +149,11 @@
 			buildActionMask = 2147483647;
 			files = (
 				562E133C1FE3AC21009C78AB /* JYBinder.m in Sources */,
+				56F153202045496000B35165 /* JYBinderPropertyInfo.m in Sources */,
 				5654BBCF1FE75623008D8DDA /* JYBinderProxy.m in Sources */,
 				5654BBD51FE794BC008D8DDA /* JYBinderNode.m in Sources */,
 				5654BBD21FE75EDF008D8DDA /* JYBinderUtil.m in Sources */,
 				5654BBD81FE8EE69008D8DDA /* NSObject+JYBinderDeallocating.m in Sources */,
-				56E7594F2041457C00B0972E /* JYPropertyInfo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
