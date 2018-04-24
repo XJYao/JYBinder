@@ -1,5 +1,5 @@
 //
-//  JYBinderProxy.h
+//  JYBinderObserver.h
 //  JYBinder
 //
 //  Created by XJY on 2017/12/18.
@@ -10,7 +10,7 @@
 
 @class JYBinderNode;
 
-@interface JYBinderProxy : NSObject
+@interface JYBinderObserver : NSObject
 
 /**
  单例

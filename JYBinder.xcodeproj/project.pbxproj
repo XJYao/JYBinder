@@ -7,16 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		6D53AA4A208EF293008C9596 /* JYBinderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA36208EF292008C9596 /* JYBinderNode.m */; };
-		6D53AA4B208EF293008C9596 /* JYBinderNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA39208EF292008C9596 /* JYBinderNodeManager.m */; };
 		6D53AA4C208EF293008C9596 /* JYBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA3A208EF292008C9596 /* JYBinder.m */; };
-		6D53AA4D208EF293008C9596 /* JYBinderProxy.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA3C208EF292008C9596 /* JYBinderProxy.m */; };
-		6D53AA4E208EF293008C9596 /* JYBinderSafeMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA3D208EF292008C9596 /* JYBinderSafeMapTable.m */; };
-		6D53AA4F208EF293008C9596 /* JYBinderSafeMutableSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA3F208EF292008C9596 /* JYBinderSafeMutableSet.m */; };
-		6D53AA50208EF293008C9596 /* JYBinderPropertyInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA40208EF293008C9596 /* JYBinderPropertyInfo.m */; };
-		6D53AA51208EF293008C9596 /* JYBinderUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA42208EF293008C9596 /* JYBinderUtil.m */; };
-		6D53AA52208EF293008C9596 /* NSObject+JYBinderDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA44208EF293008C9596 /* NSObject+JYBinderDeallocating.m */; };
-		6D53AA53208EF293008C9596 /* JYBinderSafeHashTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA47208EF293008C9596 /* JYBinderSafeHashTable.m */; };
+		6D53AA62208F3D09008C9596 /* JYBinderSafeHashTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA59208F3D09008C9596 /* JYBinderSafeHashTable.m */; };
+		6D53AA63208F3D09008C9596 /* JYBinderSafeMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA5B208F3D09008C9596 /* JYBinderSafeMapTable.m */; };
+		6D53AA64208F3D09008C9596 /* JYBinderSafeMutableSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA5D208F3D09008C9596 /* JYBinderSafeMutableSet.m */; };
+		6D53AA65208F3D09008C9596 /* JYBinderUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA5F208F3D09008C9596 /* JYBinderUtil.m */; };
+		6D53AA66208F3D09008C9596 /* NSObject+JYBinderDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA61208F3D09008C9596 /* NSObject+JYBinderDeallocating.m */; };
+		6D53AA6F208F3D66008C9596 /* JYBinderNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA69208F3D66008C9596 /* JYBinderNode.m */; };
+		6D53AA70208F3D66008C9596 /* JYBinderNodeManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA6B208F3D66008C9596 /* JYBinderNodeManager.m */; };
+		6D53AA75208F3E29008C9596 /* JYBinderObserver.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA74208F3E29008C9596 /* JYBinderObserver.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -34,26 +33,23 @@
 /* Begin PBXFileReference section */
 		562E13371FE3AC21009C78AB /* libJYBinder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJYBinder.a; sourceTree = BUILT_PRODUCTS_DIR; };
 		6D53AA35208EF292008C9596 /* JYBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinder.h; sourceTree = "<group>"; };
-		6D53AA36208EF292008C9596 /* JYBinderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderNode.m; sourceTree = "<group>"; };
-		6D53AA37208EF292008C9596 /* JYBinderPropertyInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderPropertyInfo.h; sourceTree = "<group>"; };
-		6D53AA38208EF292008C9596 /* JYBinderNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderNodeManager.h; sourceTree = "<group>"; };
-		6D53AA39208EF292008C9596 /* JYBinderNodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderNodeManager.m; sourceTree = "<group>"; };
 		6D53AA3A208EF292008C9596 /* JYBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinder.m; sourceTree = "<group>"; };
-		6D53AA3B208EF292008C9596 /* JYBinderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderNode.h; sourceTree = "<group>"; };
-		6D53AA3C208EF292008C9596 /* JYBinderProxy.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderProxy.m; sourceTree = "<group>"; };
-		6D53AA3D208EF292008C9596 /* JYBinderSafeMapTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeMapTable.m; sourceTree = "<group>"; };
-		6D53AA3E208EF292008C9596 /* JYBinderSafeMutableSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeMutableSet.h; sourceTree = "<group>"; };
-		6D53AA3F208EF292008C9596 /* JYBinderSafeMutableSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeMutableSet.m; sourceTree = "<group>"; };
-		6D53AA40208EF293008C9596 /* JYBinderPropertyInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderPropertyInfo.m; sourceTree = "<group>"; };
-		6D53AA41208EF293008C9596 /* JYBinderUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderUtil.h; sourceTree = "<group>"; };
-		6D53AA42208EF293008C9596 /* JYBinderUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderUtil.m; sourceTree = "<group>"; };
-		6D53AA43208EF293008C9596 /* JYBinderDefine.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderDefine.h; sourceTree = "<group>"; };
-		6D53AA44208EF293008C9596 /* NSObject+JYBinderDeallocating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYBinderDeallocating.m"; sourceTree = "<group>"; };
-		6D53AA45208EF293008C9596 /* JYBinderSafeHashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeHashTable.h; sourceTree = "<group>"; };
-		6D53AA46208EF293008C9596 /* NSObject+JYBinderDeallocating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JYBinderDeallocating.h"; sourceTree = "<group>"; };
-		6D53AA47208EF293008C9596 /* JYBinderSafeHashTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeHashTable.m; sourceTree = "<group>"; };
-		6D53AA48208EF293008C9596 /* JYBinderProxy.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderProxy.h; sourceTree = "<group>"; };
-		6D53AA49208EF293008C9596 /* JYBinderSafeMapTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeMapTable.h; sourceTree = "<group>"; };
+		6D53AA58208F3D09008C9596 /* JYBinderSafeHashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeHashTable.h; sourceTree = "<group>"; };
+		6D53AA59208F3D09008C9596 /* JYBinderSafeHashTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeHashTable.m; sourceTree = "<group>"; };
+		6D53AA5A208F3D09008C9596 /* JYBinderSafeMapTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeMapTable.h; sourceTree = "<group>"; };
+		6D53AA5B208F3D09008C9596 /* JYBinderSafeMapTable.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeMapTable.m; sourceTree = "<group>"; };
+		6D53AA5C208F3D09008C9596 /* JYBinderSafeMutableSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeMutableSet.h; sourceTree = "<group>"; };
+		6D53AA5D208F3D09008C9596 /* JYBinderSafeMutableSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderSafeMutableSet.m; sourceTree = "<group>"; };
+		6D53AA5E208F3D09008C9596 /* JYBinderUtil.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderUtil.h; sourceTree = "<group>"; };
+		6D53AA5F208F3D09008C9596 /* JYBinderUtil.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderUtil.m; sourceTree = "<group>"; };
+		6D53AA60208F3D09008C9596 /* NSObject+JYBinderDeallocating.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+JYBinderDeallocating.h"; sourceTree = "<group>"; };
+		6D53AA61208F3D09008C9596 /* NSObject+JYBinderDeallocating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYBinderDeallocating.m"; sourceTree = "<group>"; };
+		6D53AA68208F3D66008C9596 /* JYBinderNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderNode.h; sourceTree = "<group>"; };
+		6D53AA69208F3D66008C9596 /* JYBinderNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderNode.m; sourceTree = "<group>"; };
+		6D53AA6A208F3D66008C9596 /* JYBinderNodeManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderNodeManager.h; sourceTree = "<group>"; };
+		6D53AA6B208F3D66008C9596 /* JYBinderNodeManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderNodeManager.m; sourceTree = "<group>"; };
+		6D53AA73208F3E29008C9596 /* JYBinderObserver.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderObserver.h; sourceTree = "<group>"; };
+		6D53AA74208F3E29008C9596 /* JYBinderObserver.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderObserver.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -86,29 +82,50 @@
 		562E13391FE3AC21009C78AB /* JYBinder */ = {
 			isa = PBXGroup;
 			children = (
+				6D53AA72208F3E29008C9596 /* Observer */,
+				6D53AA67208F3D66008C9596 /* Node */,
+				6D53AA57208F3D09008C9596 /* Util */,
 				6D53AA35208EF292008C9596 /* JYBinder.h */,
 				6D53AA3A208EF292008C9596 /* JYBinder.m */,
-				6D53AA43208EF293008C9596 /* JYBinderDefine.h */,
-				6D53AA3B208EF292008C9596 /* JYBinderNode.h */,
-				6D53AA36208EF292008C9596 /* JYBinderNode.m */,
-				6D53AA38208EF292008C9596 /* JYBinderNodeManager.h */,
-				6D53AA39208EF292008C9596 /* JYBinderNodeManager.m */,
-				6D53AA37208EF292008C9596 /* JYBinderPropertyInfo.h */,
-				6D53AA40208EF293008C9596 /* JYBinderPropertyInfo.m */,
-				6D53AA48208EF293008C9596 /* JYBinderProxy.h */,
-				6D53AA3C208EF292008C9596 /* JYBinderProxy.m */,
-				6D53AA45208EF293008C9596 /* JYBinderSafeHashTable.h */,
-				6D53AA47208EF293008C9596 /* JYBinderSafeHashTable.m */,
-				6D53AA49208EF293008C9596 /* JYBinderSafeMapTable.h */,
-				6D53AA3D208EF292008C9596 /* JYBinderSafeMapTable.m */,
-				6D53AA3E208EF292008C9596 /* JYBinderSafeMutableSet.h */,
-				6D53AA3F208EF292008C9596 /* JYBinderSafeMutableSet.m */,
-				6D53AA41208EF293008C9596 /* JYBinderUtil.h */,
-				6D53AA42208EF293008C9596 /* JYBinderUtil.m */,
-				6D53AA46208EF293008C9596 /* NSObject+JYBinderDeallocating.h */,
-				6D53AA44208EF293008C9596 /* NSObject+JYBinderDeallocating.m */,
 			);
 			path = JYBinder;
+			sourceTree = "<group>";
+		};
+		6D53AA57208F3D09008C9596 /* Util */ = {
+			isa = PBXGroup;
+			children = (
+				6D53AA58208F3D09008C9596 /* JYBinderSafeHashTable.h */,
+				6D53AA59208F3D09008C9596 /* JYBinderSafeHashTable.m */,
+				6D53AA5A208F3D09008C9596 /* JYBinderSafeMapTable.h */,
+				6D53AA5B208F3D09008C9596 /* JYBinderSafeMapTable.m */,
+				6D53AA5C208F3D09008C9596 /* JYBinderSafeMutableSet.h */,
+				6D53AA5D208F3D09008C9596 /* JYBinderSafeMutableSet.m */,
+				6D53AA5E208F3D09008C9596 /* JYBinderUtil.h */,
+				6D53AA5F208F3D09008C9596 /* JYBinderUtil.m */,
+				6D53AA60208F3D09008C9596 /* NSObject+JYBinderDeallocating.h */,
+				6D53AA61208F3D09008C9596 /* NSObject+JYBinderDeallocating.m */,
+			);
+			path = Util;
+			sourceTree = "<group>";
+		};
+		6D53AA67208F3D66008C9596 /* Node */ = {
+			isa = PBXGroup;
+			children = (
+				6D53AA68208F3D66008C9596 /* JYBinderNode.h */,
+				6D53AA69208F3D66008C9596 /* JYBinderNode.m */,
+				6D53AA6A208F3D66008C9596 /* JYBinderNodeManager.h */,
+				6D53AA6B208F3D66008C9596 /* JYBinderNodeManager.m */,
+			);
+			path = Node;
+			sourceTree = "<group>";
+		};
+		6D53AA72208F3E29008C9596 /* Observer */ = {
+			isa = PBXGroup;
+			children = (
+				6D53AA73208F3E29008C9596 /* JYBinderObserver.h */,
+				6D53AA74208F3E29008C9596 /* JYBinderObserver.m */,
+			);
+			path = Observer;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -168,16 +185,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6D53AA4E208EF293008C9596 /* JYBinderSafeMapTable.m in Sources */,
-				6D53AA4F208EF293008C9596 /* JYBinderSafeMutableSet.m in Sources */,
-				6D53AA53208EF293008C9596 /* JYBinderSafeHashTable.m in Sources */,
-				6D53AA52208EF293008C9596 /* NSObject+JYBinderDeallocating.m in Sources */,
-				6D53AA4B208EF293008C9596 /* JYBinderNodeManager.m in Sources */,
-				6D53AA50208EF293008C9596 /* JYBinderPropertyInfo.m in Sources */,
-				6D53AA4A208EF293008C9596 /* JYBinderNode.m in Sources */,
+				6D53AA70208F3D66008C9596 /* JYBinderNodeManager.m in Sources */,
+				6D53AA63208F3D09008C9596 /* JYBinderSafeMapTable.m in Sources */,
+				6D53AA65208F3D09008C9596 /* JYBinderUtil.m in Sources */,
+				6D53AA75208F3E29008C9596 /* JYBinderObserver.m in Sources */,
 				6D53AA4C208EF293008C9596 /* JYBinder.m in Sources */,
-				6D53AA51208EF293008C9596 /* JYBinderUtil.m in Sources */,
-				6D53AA4D208EF293008C9596 /* JYBinderProxy.m in Sources */,
+				6D53AA62208F3D09008C9596 /* JYBinderSafeHashTable.m in Sources */,
+				6D53AA64208F3D09008C9596 /* JYBinderSafeMutableSet.m in Sources */,
+				6D53AA6F208F3D66008C9596 /* JYBinderNode.m in Sources */,
+				6D53AA66208F3D09008C9596 /* NSObject+JYBinderDeallocating.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

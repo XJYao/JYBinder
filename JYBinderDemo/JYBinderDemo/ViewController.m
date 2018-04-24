@@ -30,23 +30,23 @@
     
     self.person = [[Person alloc] init];
     
-//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", self.label2, @"text", nil];
+    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", self.label2, @"text", nil];
     
-    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" targetObject:self.label1 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
-        return YES;
-    }];
+//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" targetObject:self.label1 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+//        return YES;
+//    }];
+//
+//    [JYBinder bindSourceObject:self.label1 sourceKeyPath:@"text" targetObject:self.label2 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+//        return YES;
+//    }];
+//
+//    [JYBinder bindSourceObject:self.label2 sourceKeyPath:@"text" targetObject:self.label3 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+//        return YES;
+//    }];
     
-    [JYBinder bindSourceObject:self.label1 sourceKeyPath:@"text" targetObject:self.label2 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
-        return YES;
-    }];
-    
-    [JYBinder bindSourceObject:self.label2 sourceKeyPath:@"text" targetObject:self.label3 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
-        return YES;
-    }];
-    
-    [JYBinder bindSourceObject:self.label3 sourceKeyPath:@"text" targetObject:self.person targetKeyPath:@"name" willChangeTargetBlock:^BOOL(id sourceValue) {
-        return YES;
-    }];
+//    [JYBinder bindSourceObject:self.label3 sourceKeyPath:@"text" targetObject:self.person targetKeyPath:@"name" willChangeTargetBlock:^BOOL(id sourceValue) {
+//        return YES;
+//    }];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -58,7 +58,8 @@
 }
 
 - (IBAction)click2:(id)sender {
-    [JYBinder unbindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", nil];
+    [JYBinder unbindObject:self.person keyPath:@"name"];
+//    [JYBinder unbindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", nil];
 }
 
 @end

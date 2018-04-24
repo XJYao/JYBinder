@@ -1,19 +1,19 @@
 //
-//  JYBinderProxy.m
+//  JYBinderObserver.m
 //  JYBinder
 //
 //  Created by XJY on 2017/12/18.
 //  Copyright © 2017年 JY. All rights reserved.
 //
 
-#import "JYBinderProxy.h"
+#import "JYBinderObserver.h"
 #import "JYBinderUtil.h"
 #import "NSObject+JYBinderDeallocating.h"
 #import "JYBinderNode.h"
 #import "JYBinderPropertyInfo.h"
 #import <objc/message.h>
 
-@implementation JYBinderProxy
+@implementation JYBinderObserver
 
 + (instancetype)sharedInstance {
     static id manager = nil;

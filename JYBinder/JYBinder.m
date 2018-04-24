@@ -9,7 +9,7 @@
 #import "JYBinder.h"
 #import "JYBinderNode.h"
 #import "JYBinderNodeManager.h"
-#import "JYBinderProxy.h"
+#import "JYBinderObserver.h"
 #import "JYBinderUtil.h"
 
 @implementation JYBinder
@@ -44,7 +44,7 @@
     //生成源结点
     JYBinderNode *sourceNode = [[JYBinderNodeManager sharedInstance] addNodeWithObject:sourceObject keyPath:sourceKeyPath willChangeTargetBlock:nil];
     //开启监听
-    [[JYBinderProxy sharedInstance] addObserverForNode:sourceNode];
+    [[JYBinderObserver sharedInstance] addObserverForNode:sourceNode];
     
     //生成目标结点，并将它们与源结点关联
     for (NSInteger i = 0; i < objects.count; i ++) {
@@ -69,7 +69,7 @@
     //生成源结点
     JYBinderNode *sourceNode = [[JYBinderNodeManager sharedInstance] addNodeWithObject:sourceObject keyPath:sourceKeyPath willChangeTargetBlock:nil];
     //开启属性监听
-    [[JYBinderProxy sharedInstance] addObserverForNode:sourceNode];
+    [[JYBinderObserver sharedInstance] addObserverForNode:sourceNode];
     
     //生成目标结点，并将它与源结点关联
     JYBinderNode *targetNode = [[JYBinderNodeManager sharedInstance] addNodeWithObject:targetObject keyPath:targetKeyPath willChangeTargetBlock:block];
@@ -83,7 +83,7 @@
         return;
     }
     //移除监听
-    [[JYBinderProxy sharedInstance] removeObserverForNode:node];
+    [[JYBinderObserver sharedInstance] removeObserverForNode:node];
     //移除结点
     [[JYBinderNodeManager sharedInstance] removeNodeWithObject:object keyPath:keyPath];
 }
@@ -136,7 +136,7 @@
     
     if (sourceNode.bindingNodes.count == 0) {
         //移除监听
-        [[JYBinderProxy sharedInstance] removeObserverForNode:sourceNode];
+        [[JYBinderObserver sharedInstance] removeObserverForNode:sourceNode];
         //移除结点
         [[JYBinderNodeManager sharedInstance] removeNodeWithObject:sourceNode.object keyPath:sourceNode.keyPath];
     }
