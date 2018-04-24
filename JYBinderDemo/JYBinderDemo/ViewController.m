@@ -10,88 +10,55 @@
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
 
-//解绑
 //自定义setter时，需要实现setter方法并调用will和didchangevalue
-//不支持char *
 
 
 @interface ViewController () <UITextFieldDelegate>
 
-@property (weak, nonatomic) IBOutlet UILabel *nameLabel;
-@property (weak, nonatomic) IBOutlet UILabel *name2Label;
-@property (weak, nonatomic) IBOutlet UITextField *nameTextField;
+@property (weak, nonatomic) IBOutlet UILabel *label1;
+@property (weak, nonatomic) IBOutlet UILabel *label2;
+@property (weak, nonatomic) IBOutlet UILabel *label3;
 
-@property (weak, nonatomic) IBOutlet UIButton *button1;
-@property (weak, nonatomic) IBOutlet UIButton *button2;
-
-@property (nonatomic, strong) Person *person1;
-@property (nonatomic, strong) Person *person2;
+@property (nonatomic, strong) Person *person;
 
 @end
 
-@implementation ViewController {
-    
-}
+@implementation ViewController
+
 - (void)viewDidLoad {
     [super viewDidLoad];
-    // Do any additional setup after loading the view, typically from a nib.
     
-    [self.nameTextField setDelegate:self];
+    self.person = [[Person alloc] init];
     
-    self.person1 = [[Person alloc] init];
-    self.person2 = [[Person alloc] init];
+//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", self.label2, @"text", nil];
     
-//    [JYBinder bindSourceObject:self.person1 sourceKeyPath:@"name" toObjectsAndKeyPaths:self.nameLabel, @"text", self.name2Label, @"text", nil];
-    
-    [JYBinder bindSourceObject:self.person1 sourceKeyPath:@"name" targetObject:self.nameLabel targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
-//        self.nameLabel.text = @"123";
+    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" targetObject:self.label1 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
         return YES;
     }];
     
-//    [JYBinder bindWithObjectsAndKeyPaths:
-//     self.person1, @"name",
-//     self.nameLabel, @"text",
-//     self.name2Label, @"text",
-//     nil];
-//
-//    [JYBinder bindSourceObject:self.person2 sourceKeyPath:@"name" toObjectsAndKeyPaths:
-//     self.nameLabel, @"text",
-//     self.name2Label, @"text",
-//     nil];
-//
-//    [self.person1 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
-//    [self.person2 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+    [JYBinder bindSourceObject:self.label1 sourceKeyPath:@"text" targetObject:self.label2 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+        return YES;
+    }];
+    
+    [JYBinder bindSourceObject:self.label2 sourceKeyPath:@"text" targetObject:self.label3 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+        return YES;
+    }];
+    
+    [JYBinder bindSourceObject:self.label3 sourceKeyPath:@"text" targetObject:self.person targetKeyPath:@"name" willChangeTargetBlock:^BOOL(id sourceValue) {
+        return YES;
+    }];
 }
 
 - (void)didReceiveMemoryWarning {
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
 }
 
-- (BOOL)textFieldShouldReturn:(UITextField *)textField {
-    [self.nameLabel setText:textField.text];
-    return YES;
+- (IBAction)click1:(id)sender {
+    [self.person setName:self.person.name.length > 0 ? [self.person.name stringByAppendingString:@"1"] : @"1"];
 }
 
-- (IBAction)drop:(id)sender {
-    [self.person1 setName:self.person1.name.length > 0 ? [self.person1.name stringByAppendingString:@"1"] : @"1"];
-//    [self.person1 removeObserver:self forKeyPath:@"name"];
-//    self.person1 = nil;
+- (IBAction)click2:(id)sender {
+    [JYBinder unbindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", nil];
 }
-
-- (IBAction)drop2:(id)sender {
-    [JYBinder unbindSourceObject:self.person1 sourceKeyPath:@"name" toObjectsAndKeyPaths:self.nameLabel, @"text", nil];
-//    [self.person2 setName:@"nick"];
-//    [self.person2 removeObserver:self forKeyPath:@"name"];
-//    self.person2  = nil;
-}
-
-//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-//    if (object == self.person1) {
-//        [self.button1 setTitle:self.person1.name forState:UIControlStateNormal];
-//    } else if (object == self.person2) {
-//        [self.button2 setTitle:self.person2.name forState:UIControlStateNormal];
-//    }
-//}
 
 @end
