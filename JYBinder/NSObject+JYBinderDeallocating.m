@@ -71,14 +71,14 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
 
 static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
 
-- (void)setRegisteredKeyPaths:(NSMutableSet *)registeredKeyPaths {
+- (void)setRegisteredKeyPaths:(JYBinderSafeMutableSet *)registeredKeyPaths {
     objc_setAssociatedObject(self, RegisteredKeyPathsKey, registeredKeyPaths, OBJC_ASSOCIATION_RETAIN);
 }
 
-- (NSMutableSet *)registeredKeyPaths {
-    NSMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
+- (JYBinderSafeMutableSet *)registeredKeyPaths {
+    JYBinderSafeMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
     if ([JYBinderUtil isObjectNull:obj]) {
-        obj = [NSMutableSet set];
+        obj = [[JYBinderSafeMutableSet alloc] init];
         [self setRegisteredKeyPaths:obj];
     }
     return obj;

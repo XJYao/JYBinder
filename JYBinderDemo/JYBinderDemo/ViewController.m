@@ -41,19 +41,26 @@
     self.person1 = [[Person alloc] init];
     self.person2 = [[Person alloc] init];
     
-    [JYBinder bindWithObjectsAndKeyPaths:
-     self.person1, @"name",
-     self.nameLabel, @"text",
-     self.name2Label, @"text",
-     nil];
+//    [JYBinder bindSourceObject:self.person1 sourceKeyPath:@"name" toObjectsAndKeyPaths:self.nameLabel, @"text", self.name2Label, @"text", nil];
     
-    [JYBinder bindSourceObject:self.person2 sourceKeyPath:@"name" toObjectsAndKeyPaths:
-     self.nameLabel, @"text",
-     self.name2Label, @"text",
-     nil];
+    [JYBinder bindSourceObject:self.person1 sourceKeyPath:@"name" targetObject:self.nameLabel targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
+//        self.nameLabel.text = @"123";
+        return YES;
+    }];
     
-    [self.person1 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
-    [self.person2 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+//    [JYBinder bindWithObjectsAndKeyPaths:
+//     self.person1, @"name",
+//     self.nameLabel, @"text",
+//     self.name2Label, @"text",
+//     nil];
+//
+//    [JYBinder bindSourceObject:self.person2 sourceKeyPath:@"name" toObjectsAndKeyPaths:
+//     self.nameLabel, @"text",
+//     self.name2Label, @"text",
+//     nil];
+//
+//    [self.person1 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
+//    [self.person2 addObserver:self forKeyPath:@"name" options:NSKeyValueObservingOptionNew context:NULL];
 }
 
 - (void)didReceiveMemoryWarning {
@@ -67,23 +74,24 @@
 }
 
 - (IBAction)drop:(id)sender {
-    [self.person1 setName:@"tom"];
+    [self.person1 setName:self.person1.name.length > 0 ? [self.person1.name stringByAppendingString:@"1"] : @"1"];
 //    [self.person1 removeObserver:self forKeyPath:@"name"];
 //    self.person1 = nil;
 }
 
 - (IBAction)drop2:(id)sender {
-    [self.person2 setName:@"nick"];
+    [JYBinder unbindSourceObject:self.person1 sourceKeyPath:@"name" toObjectsAndKeyPaths:self.nameLabel, @"text", nil];
+//    [self.person2 setName:@"nick"];
 //    [self.person2 removeObserver:self forKeyPath:@"name"];
 //    self.person2  = nil;
 }
 
-- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
-    if (object == self.person1) {
-        [self.button1 setTitle:self.person1.name forState:UIControlStateNormal];
-    } else if (object == self.person2) {
-        [self.button2 setTitle:self.person2.name forState:UIControlStateNormal];
-    }
-}
+//- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary<NSKeyValueChangeKey,id> *)change context:(void *)context {
+//    if (object == self.person1) {
+//        [self.button1 setTitle:self.person1.name forState:UIControlStateNormal];
+//    } else if (object == self.person2) {
+//        [self.button2 setTitle:self.person2.name forState:UIControlStateNormal];
+//    }
+//}
 
 @end

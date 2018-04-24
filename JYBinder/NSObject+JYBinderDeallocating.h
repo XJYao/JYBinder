@@ -7,11 +7,18 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYBinderSafeMutableSet.h"
 
 @interface NSObject (JYBinderDeallocating)
 
-@property (nonatomic, strong) NSMutableSet *registeredKeyPaths;
+/**
+ 已监听过的属性
+ */
+@property (nonatomic, strong) JYBinderSafeMutableSet *registeredKeyPaths;
 
+/**
+ 对象释放时的回调
+ */
 @property (nonatomic, copy) void (^removeObserverWhenDeallocBlock)(NSObject *deallocObject);
 
 @end

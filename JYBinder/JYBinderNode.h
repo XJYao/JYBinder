@@ -7,15 +7,34 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "JYBinderDefine.h"
+#import "JYBinderSafeHashTable.h"
 
 @interface JYBinderNode : NSObject
 
+/**
+ 对象
+ */
 @property (nonatomic, weak, readonly) NSObject *object;
 
+/**
+ 属性
+ */
 @property (nonatomic, copy, readonly) NSString *keyPath;
 
-@property (nonatomic, strong, readonly) NSHashTable<JYBinderNode *> *bindingNodes;
+/**
+ 关联的结点，表中元素都是弱引用
+ */
+@property (nonatomic, strong, readonly) JYBinderSafeHashTable *bindingNodes;
 
-- (instancetype)initWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+/**
+ 值改变前的回调
+ */
+@property (nonatomic, copy) JYBinderNodeWillChangeValueBlock willChangeValueBlock;
+
+/**
+ 初始化方法，弱引用对象
+ */
+- (instancetype)initWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath willChangeTargetBlock:(JYBinderNodeWillChangeValueBlock)block;
 
 @end

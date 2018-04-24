@@ -12,14 +12,25 @@
 
 @interface JYBinderProxy : NSObject
 
+/**
+ 单例
+
+ @return 监听器
+ */
 + (instancetype)sharedInstance;
 
-- (JYBinderNode *)addObserverForObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+/**
+ 监听结点
 
-- (JYBinderNode *)addBindedWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+ @param node 结点
+ */
+- (void)addObserverForNode:(JYBinderNode *)node;
 
-- (void)removeWithObject:(NSObject *__weak)object keyPath:(NSString *)keyPath;
+/**
+ 移除指定结点的监听
 
-- (void)removeWithObject:(NSObject *__weak)object;
+ @param node 结点
+ */
+- (void)removeObserverForNode:(JYBinderNode *)node;
 
 @end
