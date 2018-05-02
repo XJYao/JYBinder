@@ -30,36 +30,36 @@
     }
     
     //只监听未监听过的属性
-    if ([node.object.registeredKeyPaths containsObject:node.keyPath]) {
-        return;
-    }
-    
-    void *context = (__bridge void * _Nullable)(node);
-    
-    //KVO监听
-    [node.object addObserver:self forKeyPath:node.keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:context];
-    //记录已监听的属性
-    [node.object.registeredKeyPaths addObject:node.keyPath];
-    
-    __weak typeof(self) weak_self = self;
-    
-    node.object.removeObserverWhenDeallocBlock = ^(NSObject *deallocObject) {
-        for (NSString *keyPath in deallocObject.registeredKeyPaths.allObjects) {
-            [deallocObject removeObserver:weak_self forKeyPath:keyPath context:context];
-        }
-        [deallocObject.registeredKeyPaths removeAllObjects];
-    };
+//    if ([node.object.registeredKeyPaths containsObject:node.keyPath]) {
+//        return;
+//    }
+//
+//    void *context = (__bridge void * _Nullable)(node);
+//
+//    //KVO监听
+//    [node.object addObserver:self forKeyPath:node.keyPath options:NSKeyValueObservingOptionOld | NSKeyValueObservingOptionNew context:context];
+//    //记录已监听的属性
+//    [node.object.registeredKeyPaths addObject:node.keyPath];
+//
+//    __weak typeof(self) weak_self = self;
+//
+//    [node.object addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+//        for (NSString *keyPath in deallocObject.registeredKeyPaths.allObjects) {
+//            [deallocObject removeObserver:weak_self forKeyPath:keyPath context:context];
+//        }
+//        [deallocObject.registeredKeyPaths removeAllObjects];
+//    }];
 }
 
 - (void)removeObserverForNode:(JYBinderNode *)node {
     if ([JYBinderUtil isObjectNull:node.object] || [JYBinderUtil isStringEmpty:node.keyPath]) {
         return;
     }
-    if ([node.object.registeredKeyPaths containsObject:node.keyPath]) {
-        //已监听过，才移除
-        [node.object removeObserver:self forKeyPath:node.keyPath context:(__bridge void * _Nullable)(node)];
-        [node.object.registeredKeyPaths removeObject:node.keyPath];
-    }
+//    if ([node.object.registeredKeyPaths containsObject:node.keyPath]) {
+//        //已监听过，才移除
+//        [node.object removeObserver:self forKeyPath:node.keyPath context:(__bridge void * _Nullable)(node)];
+//        [node.object.registeredKeyPaths removeObject:node.keyPath];
+//    }
 }
 
 #pragma mark - KVO

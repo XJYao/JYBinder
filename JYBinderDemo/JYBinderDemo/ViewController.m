@@ -10,6 +10,8 @@
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
 
+#import <ReactiveObjC/ReactiveObjC.h>
+
 //自定义setter时，需要实现setter方法并调用will和didchangevalue
 
 
@@ -30,7 +32,11 @@
     
     self.person = [[Person alloc] init];
     
-    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", self.label2, @"text", nil];
+    JYBinderChannel(self.label1, text, self.person, name);
+    JYBinderChannel(self.label1, text, self.label2, text);
+//    RACChannelTo(self.label1, text) = RACChannelTo(self.person, name);
+    
+//    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", self.label2, @"text", nil];
     
 //    [JYBinder bindSourceObject:self.person sourceKeyPath:@"name" targetObject:self.label1 targetKeyPath:@"text" willChangeTargetBlock:^BOOL(id sourceValue) {
 //        return YES;
@@ -58,7 +64,8 @@
 }
 
 - (IBAction)click2:(id)sender {
-    [JYBinder unbindObject:self.person keyPath:@"name"];
+    self.label1.text = @"aa";
+//    [JYBinder unbindObject:self.person keyPath:@"name"];
 //    [JYBinder unbindSourceObject:self.person sourceKeyPath:@"name" toObjectsAndKeyPaths:self.label1, @"text", nil];
 }
 

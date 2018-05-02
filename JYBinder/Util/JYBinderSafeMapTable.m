@@ -21,6 +21,14 @@
 
 @implementation JYBinderSafeMapTable
 
+- (instancetype)initWithKeyOptions:(NSPointerFunctionsOptions)keyOptions valueOptions:(NSPointerFunctionsOptions)valueOptions {
+    self = [super init];
+    if (self) {
+        self.mapTable = [[NSMapTable alloc] initWithKeyOptions:keyOptions valueOptions:valueOptions capacity:0];
+    }
+    return self;
+}
+
 - (void)setObject:(id)anObject forKey:(id)aKey {
     [self.safeLock lock];
     [self.mapTable setObject:anObject forKey:aKey];
@@ -53,13 +61,6 @@
         _safeLock = [[NSLock alloc] init];
     }
     return _safeLock;
-}
-
-- (NSMapTable *)mapTable {
-    if (!_mapTable) {
-        _mapTable = [[NSMapTable alloc] initWithKeyOptions:NSPointerFunctionsWeakMemory valueOptions:NSPointerFunctionsStrongMemory capacity:0];
-    }
-    return _mapTable;
 }
 
 @end

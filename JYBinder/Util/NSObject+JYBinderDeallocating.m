@@ -11,7 +11,15 @@
 #import <objc/message.h>
 #import <objc/runtime.h>
 
+@interface NSObject ()
+
+@property (nonatomic, strong) NSMutableSet *blocks;
+
+@end
+
 @implementation NSObject (JYBinderDeallocating)
+
+typedef void (^JYBinderRemoveObserverWhenDeallocBlock)(NSObject *deallocObject);
 
 static NSMutableSet *swizzledClasses() {
     static dispatch_once_t onceToken;
@@ -33,9 +41,8 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
         __block void (*originalDealloc)(__unsafe_unretained id, SEL) = NULL;
         
         id newDealloc = ^(__unsafe_unretained id self) {
-            
-            if (((NSObject *)self).removeObserverWhenDeallocBlock) {
-                ((NSObject *)self).removeObserverWhenDeallocBlock(self);
+            for (JYBinderRemoveObserverWhenDeallocBlock block in ((NSObject *)self).blocks) {
+                block(self);
             }
             
             if (originalDealloc == NULL) {
@@ -69,32 +76,39 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
     }
 }
 
-static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
-
-- (void)setRegisteredKeyPaths:(JYBinderSafeMutableSet *)registeredKeyPaths {
-    objc_setAssociatedObject(self, RegisteredKeyPathsKey, registeredKeyPaths, OBJC_ASSOCIATION_RETAIN);
-}
-
-- (JYBinderSafeMutableSet *)registeredKeyPaths {
-    JYBinderSafeMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
-    if ([JYBinderUtil isObjectNull:obj]) {
-        obj = [[JYBinderSafeMutableSet alloc] init];
-        [self setRegisteredKeyPaths:obj];
+- (void)addRemoveObserverWhenDeallocBlock:(void (^)(NSObject *))block {
+    if ([JYBinderUtil isObjectNull:block]) {
+        return;
     }
-    return obj;
+    [self.blocks addObject:block];
+    swizzleDeallocIfNeeded(self.class);
 }
 
-static const void *RemoveObserverWhenDeallocBlockKey = &RemoveObserverWhenDeallocBlockKey;
+//static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
+//
+//- (void)setRegisteredKeyPaths:(JYBinderSafeMutableSet *)registeredKeyPaths {
+//    objc_setAssociatedObject(self, RegisteredKeyPathsKey, registeredKeyPaths, OBJC_ASSOCIATION_RETAIN);
+//}
+//
+//- (JYBinderSafeMutableSet *)registeredKeyPaths {
+//    JYBinderSafeMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
+//    if ([JYBinderUtil isObjectNull:obj]) {
+//        obj = [[JYBinderSafeMutableSet alloc] init];
+//        [self setRegisteredKeyPaths:obj];
+//    }
+//    return obj;
+//}
 
-- (void)setRemoveObserverWhenDeallocBlock:(void (^)(NSObject *))removeObserverWhenDeallocBlock {
+static const void *RemoveObserverWhenDeallocBlocksKey = &RemoveObserverWhenDeallocBlocksKey;
+
+- (void)setBlocks:(NSMutableSet *)blocks {
     @synchronized (self) {
-        swizzleDeallocIfNeeded(self.class);
-        objc_setAssociatedObject(self, RemoveObserverWhenDeallocBlockKey, removeObserverWhenDeallocBlock, OBJC_ASSOCIATION_RETAIN);
+        objc_setAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey, blocks, OBJC_ASSOCIATION_RETAIN);
     }
 }
 
-- (void (^)(NSObject *))removeObserverWhenDeallocBlock {
-    return objc_getAssociatedObject(self, RemoveObserverWhenDeallocBlockKey);
+- (NSMutableSet *)blocks {
+    return objc_getAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey);
 }
 
 @end

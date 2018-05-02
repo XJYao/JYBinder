@@ -13,6 +13,8 @@
  */
 @interface JYBinderSafeMapTable : NSObject
 
+- (instancetype)initWithKeyOptions:(NSPointerFunctionsOptions)keyOptions valueOptions:(NSPointerFunctionsOptions)valueOptions;
+
 - (void)setObject:(id)anObject forKey:(id)aKey;
 
 - (id)objectForKey:(id)aKey;

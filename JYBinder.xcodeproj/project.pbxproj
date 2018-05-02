@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		56CE0DBA2099F06100075C11 /* JYBinderTerminal.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CE0DB92099F06100075C11 /* JYBinderTerminal.m */; };
+		56CE0DBD2099F07C00075C11 /* JYBinderChannel.m in Sources */ = {isa = PBXBuildFile; fileRef = 56CE0DBC2099F07C00075C11 /* JYBinderChannel.m */; };
 		6D53AA4C208EF293008C9596 /* JYBinder.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA3A208EF292008C9596 /* JYBinder.m */; };
 		6D53AA62208F3D09008C9596 /* JYBinderSafeHashTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA59208F3D09008C9596 /* JYBinderSafeHashTable.m */; };
 		6D53AA63208F3D09008C9596 /* JYBinderSafeMapTable.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA5B208F3D09008C9596 /* JYBinderSafeMapTable.m */; };
@@ -32,6 +34,10 @@
 
 /* Begin PBXFileReference section */
 		562E13371FE3AC21009C78AB /* libJYBinder.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = libJYBinder.a; sourceTree = BUILT_PRODUCTS_DIR; };
+		56CE0DB82099F06100075C11 /* JYBinderTerminal.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderTerminal.h; sourceTree = "<group>"; };
+		56CE0DB92099F06100075C11 /* JYBinderTerminal.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderTerminal.m; sourceTree = "<group>"; };
+		56CE0DBB2099F07C00075C11 /* JYBinderChannel.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderChannel.h; sourceTree = "<group>"; };
+		56CE0DBC2099F07C00075C11 /* JYBinderChannel.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinderChannel.m; sourceTree = "<group>"; };
 		6D53AA35208EF292008C9596 /* JYBinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinder.h; sourceTree = "<group>"; };
 		6D53AA3A208EF292008C9596 /* JYBinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = JYBinder.m; sourceTree = "<group>"; };
 		6D53AA58208F3D09008C9596 /* JYBinderSafeHashTable.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = JYBinderSafeHashTable.h; sourceTree = "<group>"; };
@@ -87,6 +93,10 @@
 				6D53AA57208F3D09008C9596 /* Util */,
 				6D53AA35208EF292008C9596 /* JYBinder.h */,
 				6D53AA3A208EF292008C9596 /* JYBinder.m */,
+				56CE0DB82099F06100075C11 /* JYBinderTerminal.h */,
+				56CE0DB92099F06100075C11 /* JYBinderTerminal.m */,
+				56CE0DBB2099F07C00075C11 /* JYBinderChannel.h */,
+				56CE0DBC2099F07C00075C11 /* JYBinderChannel.m */,
 			);
 			path = JYBinder;
 			sourceTree = "<group>";
@@ -186,6 +196,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				6D53AA70208F3D66008C9596 /* JYBinderNodeManager.m in Sources */,
+				56CE0DBD2099F07C00075C11 /* JYBinderChannel.m in Sources */,
+				56CE0DBA2099F06100075C11 /* JYBinderTerminal.m in Sources */,
 				6D53AA63208F3D09008C9596 /* JYBinderSafeMapTable.m in Sources */,
 				6D53AA65208F3D09008C9596 /* JYBinderUtil.m in Sources */,
 				6D53AA75208F3E29008C9596 /* JYBinderObserver.m in Sources */,
