@@ -8,39 +8,63 @@
 
 #import <Foundation/Foundation.h>
 #import "JYBinderTerminal.h"
-#import "JYBinderChannel.h"
-#import "JYBinderChannelManager.h"
+#import "JYBinderGenerator.h"
 
-#pragma mark - public macro
+/**
+ 生成单向绑定终端
 
+ @param TARGET 对象
+ @param KEYPATH 属性
+ @return 终端
+ */
 #define JYBindSingleWayChannel(TARGET, KEYPATH) \
-[[JYBinder alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:NO][@JYBinderKeypath(TARGET, KEYPATH)]
+[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:NO][@JYBinderKeypath(TARGET, KEYPATH)]
 
+/**
+ 生成双向绑定终端
+
+ @param TARGET 对象
+ @param KEYPATH 属性
+ @return 终端
+ */
 #define JYBindTwoWayChannel(TARGET, KEYPATH) \
-[[JYBinder alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:YES][@JYBinderKeypath(TARGET, KEYPATH)]
+[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:YES][@JYBinderKeypath(TARGET, KEYPATH)]
 
+/**
+ 将两终端解绑
+
+ @param TARGET1 对象1
+ @param KEYPATH1 属性1
+ @param TARGET2 对象2
+ @param KEYPATH2 属性2
+ */
 #define JYUnbind(TARGET1, KEYPATH1, TARGET2, KEYPATH2) \
-[[JYBinderChannelManager sharedInstance] removeChannel:[[JYBinderChannel alloc] initSingleWayWithLeadingTerminal:[[JYBinderTerminal alloc] initWithTarget:TARGET1 keyPath:@JYBinderKeypath(TARGET1, KEYPATH1)] followingTerminal:[[JYBinderTerminal alloc] initWithTarget:TARGET2 keyPath:@JYBinderKeypath(TARGET2, KEYPATH2)]]];
-
-#pragma mark - private macro
-
-#define JYBinderKeypath(OBJ, PATH) \
-(((void)(NO && ((void)OBJ.PATH, NO)), # PATH))
+[JYBinderGenerator unbindWithTarget1:TARGET1 keyPath1:@JYBinderKeypath(TARGET1, KEYPATH1) target2:TARGET2 keyPath2:@JYBinderKeypath(TARGET2, KEYPATH2)]
 
 @interface JYBinder : NSObject
 
-#pragma mark - public
+/**
+ 将两终端做单向绑定
 
+ @param leadingTerminal 监听者
+ @param followingTerminal 跟随者
+ */
 + (void)bindToSingleWayChannel:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
 
-+ (void)bindToTwoWayChannel:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
+/**
+ 将两终端做双向绑定，互相监听跟随
 
-#pragma mark - private
+ @param terminal 终端
+ @param otherTerminal 另一个终端
+ */
++ (void)bindToTwoWayChannel:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
-- (instancetype)initWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath isTwoWay:(BOOL)isTwoWay;
+/**
+ 将两终端解绑
 
-- (JYBinderTerminal *)objectForKeyedSubscript:(NSString *)key;
-
-- (void)setObject:(JYBinderTerminal *)leadingTerminal forKeyedSubscript:(NSString *)key;
+ @param terminal 终端
+ @param otherTerminal 另一个终端
+ */
++ (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
 @end

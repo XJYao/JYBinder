@@ -14,6 +14,7 @@
 		6D53AA65208F3D09008C9596 /* JYBinderUtil.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA5F208F3D09008C9596 /* JYBinderUtil.m */; };
 		6D53AA66208F3D09008C9596 /* NSObject+JYBinderDeallocating.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D53AA61208F3D09008C9596 /* NSObject+JYBinderDeallocating.m */; };
 		6D7068EE209AA64B0032E338 /* JYBinderChannelManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D7068ED209AA64B0032E338 /* JYBinderChannelManager.m */; };
+		6D900FD4209AEB5300CA8B70 /* JYBinderGenerator.m in Sources */ = {isa = PBXBuildFile; fileRef = 6D900FD3209AEB5300CA8B70 /* JYBinderGenerator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -44,6 +45,8 @@
 		6D53AA61208F3D09008C9596 /* NSObject+JYBinderDeallocating.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+JYBinderDeallocating.m"; sourceTree = "<group>"; };
 		6D7068EC209AA64B0032E338 /* JYBinderChannelManager.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderChannelManager.h; sourceTree = "<group>"; };
 		6D7068ED209AA64B0032E338 /* JYBinderChannelManager.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderChannelManager.m; sourceTree = "<group>"; };
+		6D900FD2209AEB5300CA8B70 /* JYBinderGenerator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = JYBinderGenerator.h; sourceTree = "<group>"; };
+		6D900FD3209AEB5300CA8B70 /* JYBinderGenerator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = JYBinderGenerator.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -85,6 +88,8 @@
 				56CE0DBC2099F07C00075C11 /* JYBinderChannel.m */,
 				6D7068EC209AA64B0032E338 /* JYBinderChannelManager.h */,
 				6D7068ED209AA64B0032E338 /* JYBinderChannelManager.m */,
+				6D900FD2209AEB5300CA8B70 /* JYBinderGenerator.h */,
+				6D900FD3209AEB5300CA8B70 /* JYBinderGenerator.m */,
 			);
 			path = JYBinder;
 			sourceTree = "<group>";
@@ -163,6 +168,7 @@
 				56CE0DBA2099F06100075C11 /* JYBinderTerminal.m in Sources */,
 				6D53AA65208F3D09008C9596 /* JYBinderUtil.m in Sources */,
 				6D53AA4C208EF293008C9596 /* JYBinder.m in Sources */,
+				6D900FD4209AEB5300CA8B70 /* JYBinderGenerator.m in Sources */,
 				6D7068EE209AA64B0032E338 /* JYBinderChannelManager.m in Sources */,
 				6D53AA64208F3D09008C9596 /* JYBinderSafeMutableSet.m in Sources */,
 				6D53AA66208F3D09008C9596 /* NSObject+JYBinderDeallocating.m in Sources */,

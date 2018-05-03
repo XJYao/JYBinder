@@ -12,10 +12,23 @@
 
 @interface JYBinderChannelManager : NSObject
 
+/**
+ 通道管理者，单例
+ */
 + (instancetype)sharedInstance;
 
+/**
+ 添加通道
+
+ @param channel 通道
+ */
 - (void)addChannel:(JYBinderChannel *)channel;
 
+/**
+ 移除通道
+
+ @param channel 通道
+ */
 - (void)removeChannel:(JYBinderChannel *)channel;
 
 @end

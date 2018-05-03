@@ -9,7 +9,6 @@
 #import "ViewController.h"
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
-#import <ReactiveObjC/ReactiveObjC.h>
 
 @interface ViewController () <UITextFieldDelegate>
 
