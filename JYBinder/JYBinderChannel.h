@@ -14,11 +14,13 @@
 
 @property (nonatomic, assign, readonly) BOOL isTwoWay;
 
-@property (nonatomic, strong) JYBinderTerminal *leadingTerminal;
+@property (nonatomic, strong, readonly) JYBinderTerminal *leadingTerminal;
 
-@property (nonatomic, strong) JYBinderTerminal *followingTerminal;
+@property (nonatomic, strong, readonly) JYBinderTerminal *followingTerminal;
 
-- (instancetype)initWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal twoWay:(BOOL)twoWay;
+- (instancetype)initSingleWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
+
+- (instancetype)initTwoWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
 
 - (void)addObserver;
 

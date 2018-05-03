@@ -7,6 +7,7 @@
 //
 
 #import "JYBinderTerminal.h"
+#import "JYBinderUtil.h"
 
 @interface JYBinderTerminal ()
 
@@ -19,6 +20,9 @@
 @implementation JYBinderTerminal
 
 - (instancetype)initWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
+    if ([JYBinderUtil isObjectNull:target] || [JYBinderUtil isStringEmpty:keyPath]) {
+        return nil;
+    }
     self = [super init];
     if (self) {
         self.theTarget = target;

@@ -13,6 +13,10 @@
 
 @interface JYBinderChannel ()
 
+@property (nonatomic, strong) JYBinderTerminal *theLeadingTerminal;
+
+@property (nonatomic, strong) JYBinderTerminal *theFollowingTerminal;
+
 @property (nonatomic, assign) BOOL leadingTerminalObserving;
 
 @property (nonatomic, assign) BOOL followingTerminalObserving;
@@ -27,7 +31,18 @@
 
 @implementation JYBinderChannel
 
+- (instancetype)initSingleWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
+    return [self initWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal twoWay:NO];
+}
+
+- (instancetype)initTwoWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
+    return [self initWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal twoWay:YES];
+}
+
 - (instancetype)initWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal twoWay:(BOOL)twoWay {
+    if ([JYBinderUtil isObjectNull:leadingTerminal] || [JYBinderUtil isObjectNull:followingTerminal]) {
+        return nil;
+    }
     self = [super init];
     if (self) {
         self.twoWay = twoWay;
@@ -36,8 +51,8 @@
         
         self.ignoreNextUpdate = NO;
         
-        self.leadingTerminal = leadingTerminal;
-        self.followingTerminal = followingTerminal;
+        self.theLeadingTerminal = leadingTerminal;
+        self.theFollowingTerminal = followingTerminal;
         
         self.leadingTerminal.otherTerminal = self.followingTerminal;
         
@@ -50,6 +65,14 @@
 
 - (BOOL)isTwoWay {
     return self.twoWay;
+}
+
+- (JYBinderTerminal *)leadingTerminal {
+    return self.theLeadingTerminal;
+}
+
+- (JYBinderTerminal *)followingTerminal {
+    return self.theFollowingTerminal;
 }
 
 - (void)addObserver {
@@ -112,7 +135,12 @@
         return;
     }
     
-    [terminal.otherTerminal.target setValue:[change objectForKey:@"new"] forKey:terminal.otherTerminal.keyPath];
+    id value = [change objectForKey:@"new"];
+    if (terminal.otherTerminal.map) {
+        value = terminal.otherTerminal.map(value);
+    }
+    
+    [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
 }
 
 #pragma mark - lazy

@@ -14,6 +14,8 @@
 
 @property (nonatomic, copy, readonly) NSString *keyPath;
 
+@property (nonatomic, copy) id  _Nullable (^map)(id _Nullable value);
+
 @property (nonatomic, weak) JYBinderTerminal *otherTerminal;
 
 - (instancetype)initWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
