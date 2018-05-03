@@ -28,8 +28,8 @@
     
     self.person = [[Person alloc] init];
     
-    JYBind(self.person, name, self.label1, text);
-    JYBindChannel(self.label1, text, self.label2, text);
+    JYBind(self.person, name, self.label1, text);//单向绑定
+    JYBindChannel(self.label1, text, self.label2, text);//双向绑定
 }
 
 - (void)didReceiveMemoryWarning {
