@@ -59,9 +59,9 @@
     
     JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {
-        [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initTwoWayWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal]];
+        [JYBinderGenerator bindToTwoWayChannel:leadingTerminal otherTerminal:followingTerminal];
     } else {
-        [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initSingleWayWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal]];
+        [JYBinderGenerator bindToSingleWayChannel:leadingTerminal followingTerminal:followingTerminal];
     }
 }
 

@@ -57,7 +57,7 @@
  @param target2 对象2
  @param keyPath2 属性2
  */
-+ (void)unbindWithTarget1:(__weak NSObject *)target1 keyPath1:(NSString *)keyPath1 target2:(NSObject *__weak)target2 keyPath2:(NSString *)keyPath2;
++ (void)unbindWithTarget1:(__weak NSObject *)target1 keyPath1:(NSString *)keyPath1 target2:(__weak NSObject *)target2 keyPath2:(NSString *)keyPath2;
 
 /**
  下标语法回调

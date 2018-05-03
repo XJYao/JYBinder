@@ -33,15 +33,39 @@
     //双向绑定label1 和 label2
     JYBindTwoWayChannel(self.label1, text) = JYBindTwoWayChannel(self.label2, text);
     
+    
+    
     //单向绑定person age和label3
-    JYBinderTerminal *followingTerminal = JYBindSingleWayChannel(self.label3, text);
+    JYBinderTerminal *followingTerminal1 = JYBindSingleWayChannel(self.label3, text);
 
-    followingTerminal.map = ^id _Nullable(id  _Nullable value) {
+    followingTerminal1.map = ^id _Nullable(id  _Nullable value) {
         //自定义转换
         return [value stringValue];
     };
-    JYBinderTerminal *leadingTerminal = JYBindSingleWayChannel(self.person, age);
-    [JYBinder bindToSingleWayChannel:leadingTerminal followingTerminal:followingTerminal];
+    JYBinderTerminal *leadingTerminal1 = JYBindSingleWayChannel(self.person, age);
+    [JYBinder bindToSingleWayChannel:leadingTerminal1 followingTerminal:followingTerminal1];
+    
+    
+    
+    
+//    //双向绑定person age和label3
+//    JYBinderTerminal *followingTerminal2 = JYBindTwoWayChannel(self.label3, text);
+//
+//    followingTerminal2.map = ^id _Nullable(id  _Nullable value) {
+//        //自定义转换
+//        return [value stringValue];
+//    };
+//    JYBinderTerminal *leadingTerminal2 = JYBindTwoWayChannel(self.person, age);
+//
+//    leadingTerminal2.map = ^id _Nullable(id  _Nullable value) {
+//        //自定义转换
+//        return @([value intValue]);
+//    };
+//
+//    [JYBinder bindToTwoWayChannel:leadingTerminal2 otherTerminal:followingTerminal2];
+
+    //解绑
+//    [JYBinder unbindWithTerminal:leadingTerminal1 otherTerminal:followingTerminal1];
 }
 
 - (void)didReceiveMemoryWarning {

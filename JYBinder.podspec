@@ -94,7 +94,7 @@ Pod::Spec.new do |s|
   s.source_files  = "#{s.name}/**/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "#{s.name}/JYBinder.h", "#{s.name}/JYBinderTerminal.h"
+  s.public_header_files = "#{s.name}/JYBinder.h", "#{s.name}/JYBinderTerminal.h", "#{s.name}/JYBinderGenerator.h"
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
