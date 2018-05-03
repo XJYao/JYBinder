@@ -8,12 +8,13 @@
 
 #import "NSObject+JYBinderDeallocating.h"
 #import "JYBinderUtil.h"
+#import "JYBinderSafeMutableSet.h"
 #import <objc/message.h>
 #import <objc/runtime.h>
 
 @interface NSObject ()
 
-@property (nonatomic, strong) NSMutableSet *blocks;
+@property (nonatomic, strong) JYBinderSafeMutableSet *blocks;
 
 @end
 
@@ -41,7 +42,7 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
         __block void (*originalDealloc)(__unsafe_unretained id, SEL) = NULL;
         
         id newDealloc = ^(__unsafe_unretained id self) {
-            for (JYBinderRemoveObserverWhenDeallocBlock block in ((NSObject *)self).blocks) {
+            for (JYBinderRemoveObserverWhenDeallocBlock block in ((NSObject *)self).blocks.allObjects) {
                 block(self);
             }
             
@@ -84,31 +85,19 @@ static void swizzleDeallocIfNeeded(Class classToSwizzle) {
     swizzleDeallocIfNeeded(self.class);
 }
 
-//static const void *RegisteredKeyPathsKey = &RegisteredKeyPathsKey;
-//
-//- (void)setRegisteredKeyPaths:(JYBinderSafeMutableSet *)registeredKeyPaths {
-//    objc_setAssociatedObject(self, RegisteredKeyPathsKey, registeredKeyPaths, OBJC_ASSOCIATION_RETAIN);
-//}
-//
-//- (JYBinderSafeMutableSet *)registeredKeyPaths {
-//    JYBinderSafeMutableSet *obj = objc_getAssociatedObject(self, RegisteredKeyPathsKey);
-//    if ([JYBinderUtil isObjectNull:obj]) {
-//        obj = [[JYBinderSafeMutableSet alloc] init];
-//        [self setRegisteredKeyPaths:obj];
-//    }
-//    return obj;
-//}
-
 static const void *RemoveObserverWhenDeallocBlocksKey = &RemoveObserverWhenDeallocBlocksKey;
 
-- (void)setBlocks:(NSMutableSet *)blocks {
-    @synchronized (self) {
-        objc_setAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey, blocks, OBJC_ASSOCIATION_RETAIN);
-    }
+- (void)setBlocks:(JYBinderSafeMutableSet *)blocks {
+    objc_setAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey, blocks, OBJC_ASSOCIATION_RETAIN);
 }
 
-- (NSMutableSet *)blocks {
-    return objc_getAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey);
+- (JYBinderSafeMutableSet *)blocks {
+    JYBinderSafeMutableSet *blocks = objc_getAssociatedObject(self, RemoveObserverWhenDeallocBlocksKey);
+    if ([JYBinderUtil isObjectNull:blocks]) {
+        blocks = [[JYBinderSafeMutableSet alloc] init];
+        [self setBlocks:blocks];
+    }
+    return blocks;
 }
 
 @end

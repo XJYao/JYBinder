@@ -12,18 +12,16 @@
 
 @interface JYBinderChannel : NSObject
 
-- (instancetype)initWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
+@property (nonatomic, assign, readonly) BOOL isTwoWay;
+
+@property (nonatomic, strong) JYBinderTerminal *leadingTerminal;
+
+@property (nonatomic, strong) JYBinderTerminal *followingTerminal;
+
+- (instancetype)initWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal twoWay:(BOOL)twoWay;
 
 - (void)addObserver;
 
 - (void)removeObserver;
-
-@end
-
-@interface JYBinderChannelsManager : NSObject
-
-+ (instancetype)sharedInstance;
-
-- (void)addChannel:(JYBinderChannel *)channel;
 
 @end
