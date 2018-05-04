@@ -2,7 +2,7 @@
 //  JYBinderTerminal.m
 //  JYBinder
 //
-//  Created by XJY on 2018/5/2.
+//  Created by XJY on 2018/3/2.
 //  Copyright © 2018年 JY. All rights reserved.
 //
 

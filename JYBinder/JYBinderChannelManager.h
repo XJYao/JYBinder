@@ -2,7 +2,7 @@
 //  JYBinderChannelManager.h
 //  JYBinder
 //
-//  Created by XJY on 2018/5/3.
+//  Created by XJY on 2018/3/3.
 //  Copyright © 2018年 JY. All rights reserved.
 //
 
