@@ -17,14 +17,26 @@
 
 @property (nonatomic, strong) JYBinderTerminal *theFollowingTerminal;
 
+/**
+ 是否已监听KVO
+ */
 @property (nonatomic, assign) BOOL leadingTerminalObserving;
 
 @property (nonatomic, assign) BOOL followingTerminalObserving;
 
+/**
+ 防止死循环
+ */
 @property (nonatomic, assign) BOOL ignoreNextUpdate;
 
+/**
+ 是否双向
+ */
 @property (nonatomic, assign) BOOL twoWay;
 
+/**
+ 线程锁
+ */
 @property (nonatomic, strong) NSLock *lock;
 
 @end
@@ -54,6 +66,7 @@
         self.theLeadingTerminal = leadingTerminal;
         self.theFollowingTerminal = followingTerminal;
         
+        //两终端做关联
         self.leadingTerminal.otherTerminal = self.followingTerminal;
         
         if (self.twoWay) {
@@ -120,6 +133,7 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (self.isTwoWay) {
         [self.lock lock];
+        //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
         if (self.ignoreNextUpdate) {
             self.ignoreNextUpdate = NO;
             
@@ -136,6 +150,7 @@
     }
     
     id value = [change objectForKey:@"new"];
+    //对值做自定义转换
     if (terminal.otherTerminal.map) {
         value = terminal.otherTerminal.map(value);
     }

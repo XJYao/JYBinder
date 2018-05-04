@@ -13,6 +13,10 @@
 
 @interface JYBinderChannelManager ()
 
+/**
+ target1->keypath1->target2->keypath2->channel
+ 并且弱引用target
+ */
 @property (nonatomic, strong) NSMapTable *channels;
 
 @property (nonatomic, strong) NSLock *lock;
@@ -42,6 +46,7 @@
     
     [self.lock lock];
     
+    //同一对终端只能存在一个通道，如果已存在就不再做保存。
     JYBinderChannel *existChannel = [self existChannelWithLeadingTerminal:channel.leadingTerminal followingTerminal:channel.followingTerminal shouldRemove:NO];
     if (![JYBinderUtil isObjectNull:existChannel]) {
         [existChannel addObserver];

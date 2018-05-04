@@ -13,6 +13,9 @@
 
 @class JYBinderTerminal;
 
+/**
+ 为了避免JYBinder类暴露太多不必要的接口，所以创建此类来做一个中转
+ */
 @interface JYBinderGenerator : NSObject
 
 /**

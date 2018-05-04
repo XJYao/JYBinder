@@ -26,7 +26,7 @@
 @property (nonatomic, copy) id  _Nullable (^map)(id _Nullable value);
 
 /**
- 跟随的终端
+ 关联的终端
  */
 @property (nonatomic, weak) JYBinderTerminal *otherTerminal;
 
