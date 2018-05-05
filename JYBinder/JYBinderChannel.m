@@ -34,6 +34,11 @@
  */
 @property (nonatomic, assign) BOOL twoWay;
 
+/**
+ 线程锁
+ */
+@property (nonatomic) dispatch_semaphore_t lock;
+
 @end
 
 @implementation JYBinderChannel
@@ -88,71 +93,89 @@
 }
 
 - (void)addObserver {
-    @synchronized (self) {
-        __weak typeof(self) weak_self = self;
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    
+    __weak typeof(self) weak_self = self;
+    
+    if (!self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+        [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
+        self.leadingTerminalObserving = YES;
         
-        if (!self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
-            [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
-            self.leadingTerminalObserving = YES;
-            
-            [self.leadingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
-                [weak_self removeObserver];
-            }];
-        }
-        
-        if (!self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
-            [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
-            self.followingTerminalObserving = YES;
-            
-            [self.followingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
-                [weak_self removeObserver];
-            }];
-        }
-        
-        id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
-        [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
+        [self.leadingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+            [weak_self removeObserver];
+        }];
     }
+    
+    if (!self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+        [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
+        self.followingTerminalObserving = YES;
+        
+        [self.followingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+            [weak_self removeObserver];
+        }];
+    }
+    
+    dispatch_semaphore_signal(self.lock);
+    
+    id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
+    [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
 }
 
 - (void)removeObserver {
-    @synchronized (self) {
-        if (self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
-            [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
-            self.leadingTerminalObserving = NO;
-        }
-        if (self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
-            [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
-            self.followingTerminalObserving = NO;
-        }
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    
+    if (self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+        [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
+        self.leadingTerminalObserving = NO;
     }
+    if (self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+        [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
+        self.followingTerminalObserving = NO;
+    }
+    dispatch_semaphore_signal(self.lock);
 }
 
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    @synchronized (self) {
-        if (self.isTwoWay) {
-            //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
-            if (self.ignoreNextUpdate) {
-                self.ignoreNextUpdate = NO;
-                return;
-            }
-            self.ignoreNextUpdate = YES;
-        }
-        
-        JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
-        if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+    
+    if (self.isTwoWay) {
+        //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
+        if (self.ignoreNextUpdate) {
+            self.ignoreNextUpdate = NO;
+            
+            dispatch_semaphore_signal(self.lock);
             return;
         }
-        
-        id value = [object valueForKey:keyPath];
-        //对值做自定义转换
-        if (terminal.otherTerminal.map) {
-            value = terminal.otherTerminal.map(value);
-        }
-        
-        [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
+        self.ignoreNextUpdate = YES;
     }
+    
+    JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
+    if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
+        dispatch_semaphore_signal(self.lock);
+        return;
+    }
+    
+    id value = [object valueForKey:keyPath];
+    //对值做自定义转换
+    if (terminal.otherTerminal.map) {
+        value = terminal.otherTerminal.map(value);
+    }
+    
+    dispatch_semaphore_signal(self.lock);
+    
+    [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
+    
+}
+
+#pragma mark - lazy
+
+- (dispatch_semaphore_t)lock {
+    if (!_lock) {
+        _lock = dispatch_semaphore_create(1);
+    }
+    return _lock;
 }
 
 @end

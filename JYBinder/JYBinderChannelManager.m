@@ -19,7 +19,10 @@
  */
 @property (nonatomic, strong) NSMapTable *channels;
 
-@property (nonatomic, strong) NSLock *lock;
+/**
+ 线程锁
+ */
+@property (nonatomic) dispatch_semaphore_t lock;
 
 @end
 
@@ -50,19 +53,19 @@
         return;
     }
     
-    [self.lock lock];
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
     
     //同一对终端只能存在一个通道，如果已存在就不再做保存。
     JYBinderChannel *existChannel = [self existChannelWithLeadingTerminal:channel.leadingTerminal followingTerminal:channel.followingTerminal shouldRemove:NO];
     if (![JYBinderUtil isObjectNull:existChannel]) {
         [existChannel addObserver];
-        [self.lock unlock];
+        dispatch_semaphore_signal(self.lock);
         return;
     }
     existChannel = [self existChannelWithLeadingTerminal:channel.followingTerminal followingTerminal:channel.leadingTerminal shouldRemove:NO];
     if (![JYBinderUtil isObjectNull:existChannel]) {
         [existChannel addObserver];
-        [self.lock unlock];
+        dispatch_semaphore_signal(self.lock);
         return;
     }
     
@@ -84,7 +87,7 @@
     [followKeyToChannel setObject:channel forKey:channel.followingTerminal.keyPath];
     [channel addObserver];
     
-    [self.lock unlock];
+    dispatch_semaphore_signal(self.lock);
 }
 
 - (void)removeChannel:(JYBinderChannel *)channel {
@@ -101,7 +104,7 @@
         return;
     }
     
-    [self.lock lock];
+    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
     
     JYBinderChannel *existChannel = [self existChannelWithLeadingTerminal:channel.leadingTerminal followingTerminal:channel.followingTerminal shouldRemove:YES];
     if ([JYBinderUtil isObjectNull:existChannel]) {
@@ -109,7 +112,7 @@
     }
     [existChannel removeObserver];
     
-    [self.lock unlock];
+    dispatch_semaphore_signal(self.lock);
 }
 
 #pragma mark - Private
@@ -143,9 +146,9 @@
     return _channels;
 }
 
-- (NSLock *)lock {
-    if ([JYBinderUtil isObjectNull:_lock]) {
-        _lock = [[NSLock alloc] init];
+- (dispatch_semaphore_t)lock {
+    if (!_lock) {
+        _lock = dispatch_semaphore_create(1);
     }
     return _lock;
 }
