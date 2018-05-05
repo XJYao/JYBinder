@@ -156,7 +156,7 @@
         return;
     }
     
-    id value = [change objectForKey:@"new"];
+    id value = [object valueForKey:keyPath];
     //对值做自定义转换
     if (terminal.otherTerminal.map) {
         value = terminal.otherTerminal.map(value);
