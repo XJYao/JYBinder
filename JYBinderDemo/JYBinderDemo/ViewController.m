@@ -10,7 +10,7 @@
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
 
-@interface ViewController ()
+@interface ViewController () <UITextViewDelegate>
 
 @property (weak, nonatomic) IBOutlet UITextField *textField1;
 @property (weak, nonatomic) IBOutlet UILabel *label1;
@@ -36,6 +36,7 @@
 - (void)viewDidLoad {
     [super viewDidLoad];
     
+    self.textView2.delegate = self;
     self.textView2.layer.borderWidth = 1;
     
     //1
@@ -98,6 +99,10 @@
 
 - (IBAction)enableClick:(id)sender {
     self.person5.enable = !self.person5.enable;
+}
+
+- (void)textViewDidChange:(UITextView *)textView {
+    textView.text = textView.text;
 }
 
 @end
