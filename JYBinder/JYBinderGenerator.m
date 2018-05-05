@@ -34,20 +34,20 @@
     return self;
 }
 
-+ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
++ (void)bindToSingleWayWithLeading:(JYBinderTerminal *)leadingTerminal following:(JYBinderTerminal *)followingTerminal {
     [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initSingleWayWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal]];
 }
 
-+ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
++ (void)bindToTwoWayWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
     [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initTwoWayWithLeadingTerminal:terminal followingTerminal:otherTerminal]];
 }
 
-+ (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
++ (void)unbindWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
     [[JYBinderChannelManager sharedInstance] removeChannel:[[JYBinderChannel alloc] initSingleWayWithLeadingTerminal:terminal followingTerminal:otherTerminal]];
 }
 
 + (void)unbindWithTarget1:(NSObject *__weak)target1 keyPath1:(NSString *)keyPath1 target2:(NSObject *__weak)target2 keyPath2:(NSString *)keyPath2 {
-    [self unbindWithTerminal:[[JYBinderTerminal alloc] initWithTarget:target1 keyPath:keyPath1] otherTerminal:[[JYBinderTerminal alloc] initWithTarget:target2 keyPath:keyPath2]];
+    [self unbindWithOneTerminal:[[JYBinderTerminal alloc] initWithTarget:target1 keyPath:keyPath1] otherTerminal:[[JYBinderTerminal alloc] initWithTarget:target2 keyPath:keyPath2]];
 }
 
 - (JYBinderTerminal *)objectForKeyedSubscript:(NSString *)key {
@@ -56,16 +56,16 @@
 }
 
 - (void)setObject:(JYBinderTerminal *)leadingTerminal forKeyedSubscript:(NSString *)key {
-    NSCParameterAssert(![JYBinderUtil isObjectNull:leadingTerminal]);
+    NSAssert(![JYBinderUtil isObjectNull:leadingTerminal], @"leadingTerminal为空");
     if (![leadingTerminal isKindOfClass:[JYBinderTerminal class]]) {
         return;
     }
     
     JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {
-        [JYBinderGenerator bindToTwoWay:leadingTerminal otherTerminal:followingTerminal];
+        [JYBinderGenerator bindToTwoWayWithOneTerminal:leadingTerminal otherTerminal:followingTerminal];
     } else {
-        [JYBinderGenerator bindToSingleWay:leadingTerminal followingTerminal:followingTerminal];
+        [JYBinderGenerator bindToSingleWayWithLeading:leadingTerminal following:followingTerminal];
     }
 }
 

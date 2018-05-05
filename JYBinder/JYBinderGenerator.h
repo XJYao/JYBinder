@@ -34,15 +34,15 @@
  @param leadingTerminal 监听者
  @param followingTerminal 跟随者
  */
-+ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
++ (void)bindToSingleWayWithLeading:(JYBinderTerminal *)leadingTerminal following:(JYBinderTerminal *)followingTerminal;
 
 /**
- 将两终端做双向绑定，互为监听跟随
+ 将两终端做双向绑定，互相监听跟随
  
  @param terminal 终端
  @param otherTerminal 另一个终端
  */
-+ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
++ (void)bindToTwoWayWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
 /**
  将两终端解绑
@@ -50,7 +50,7 @@
  @param terminal 终端
  @param otherTerminal 另一个终端
  */
-+ (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
++ (void)unbindWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
 /**
  将两终端解绑

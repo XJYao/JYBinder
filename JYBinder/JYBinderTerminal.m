@@ -20,9 +20,9 @@
 @implementation JYBinderTerminal
 
 - (instancetype)initWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
-    if ([JYBinderUtil isObjectNull:target] || [JYBinderUtil isStringEmpty:keyPath]) {
-        return nil;
-    }
+    NSAssert(![JYBinderUtil isObjectNull:target], @"target为空");
+    NSAssert(![JYBinderUtil isStringEmpty:keyPath], @"keyPath为空");
+    
     self = [super init];
     if (self) {
         self.theTarget = target;

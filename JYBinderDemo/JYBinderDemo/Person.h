@@ -13,12 +13,6 @@
 
 @property (nonatomic, copy) NSString *name;
 
-@property (nonatomic, strong) UIColor *color;
-
-@property (nonatomic, assign) CGFloat height;
-
-@property (nonatomic, assign) CGFloat weight;
-
-@property (nonatomic, assign) NSInteger age;
+@property (nonatomic, assign) BOOL enable;
 
 @end

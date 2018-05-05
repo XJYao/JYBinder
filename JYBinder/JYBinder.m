@@ -10,16 +10,16 @@
 
 @implementation JYBinder
 
-+ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
-    [JYBinderGenerator bindToSingleWay:leadingTerminal followingTerminal:followingTerminal];
++ (void)bindToSingleWayWithLeading:(JYBinderTerminal *)leadingTerminal following:(JYBinderTerminal *)followingTerminal {
+    [JYBinderGenerator bindToSingleWayWithLeading:leadingTerminal following:followingTerminal];
 }
 
-+ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
-    [JYBinderGenerator bindToTwoWay:terminal otherTerminal:otherTerminal];
++ (void)bindToTwoWayWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
+    [JYBinderGenerator bindToTwoWayWithOneTerminal:terminal otherTerminal:otherTerminal];
 }
 
-+ (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
-    [JYBinderGenerator unbindWithTerminal:terminal otherTerminal:otherTerminal];
++ (void)unbindWithOneTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
+    [JYBinderGenerator unbindWithOneTerminal:terminal otherTerminal:otherTerminal];
 }
 
 + (void)unbindWithTarget1:(NSObject *__weak)target1 keyPath1:(NSString *)keyPath1 target2:(NSObject *__weak)target2 keyPath2:(NSString *)keyPath2 {
