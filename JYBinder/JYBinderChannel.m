@@ -34,11 +34,6 @@
  */
 @property (nonatomic, assign) BOOL twoWay;
 
-/**
- 线程锁
- */
-@property (nonatomic, strong) NSLock *lock;
-
 @end
 
 @implementation JYBinderChannel
@@ -93,62 +88,57 @@
 }
 
 - (void)addObserver {
-    [self.lock lock];
-    __weak typeof(self) weak_self = self;
-    
-    if (!self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
-        [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
-        self.leadingTerminalObserving = YES;
+    @synchronized (self) {
+        __weak typeof(self) weak_self = self;
         
-        [self.leadingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
-            [weak_self removeObserver];
-        }];
-    }
-    
-    if (!self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
-        [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
-        self.followingTerminalObserving = YES;
+        if (!self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+            [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
+            self.leadingTerminalObserving = YES;
+            
+            [self.leadingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+                [weak_self removeObserver];
+            }];
+        }
         
-        [self.followingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
-            [weak_self removeObserver];
-        }];
+        if (!self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+            [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
+            self.followingTerminalObserving = YES;
+            
+            [self.followingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+                [weak_self removeObserver];
+            }];
+        }
+        
+        id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
+        [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
     }
-    
-    [self.lock unlock];
-    
-    id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
-    [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
 }
 
 - (void)removeObserver {
-    [self lock];
-    
-    if (self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
-        [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
-        self.leadingTerminalObserving = NO;
+    @synchronized (self) {
+        if (self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+            [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
+            self.leadingTerminalObserving = NO;
+        }
+        if (self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+            [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
+            self.followingTerminalObserving = NO;
+        }
     }
-    if (self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
-        [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
-        self.followingTerminalObserving = NO;
-    }
-    
-    [self.lock unlock];
 }
 
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (self.isTwoWay) {
-        [self.lock lock];
-        //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
-        if (self.ignoreNextUpdate) {
-            self.ignoreNextUpdate = NO;
-            
-            [self.lock unlock];
-            return;
+        @synchronized (self) {
+            //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
+            if (self.ignoreNextUpdate) {
+                self.ignoreNextUpdate = NO;
+                return;
+            }
+            self.ignoreNextUpdate = YES;
         }
-        self.ignoreNextUpdate = YES;
-        [self.lock unlock];
     }
     
     JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
@@ -163,15 +153,6 @@
     }
     
     [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
-}
-
-#pragma mark - lazy
-
-- (NSLock *)lock {
-    if ([JYBinderUtil isObjectNull:_lock]) {
-        _lock = [[NSLock alloc] init];
-    }
-    return _lock;
 }
 
 @end
