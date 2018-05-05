@@ -130,8 +130,8 @@
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    if (self.isTwoWay) {
-        @synchronized (self) {
+    @synchronized (self) {
+        if (self.isTwoWay) {
             //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
             if (self.ignoreNextUpdate) {
                 self.ignoreNextUpdate = NO;
@@ -139,20 +139,20 @@
             }
             self.ignoreNextUpdate = YES;
         }
+        
+        JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
+        if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
+            return;
+        }
+        
+        id value = [object valueForKey:keyPath];
+        //对值做自定义转换
+        if (terminal.otherTerminal.map) {
+            value = terminal.otherTerminal.map(value);
+        }
+        
+        [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
     }
-    
-    JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
-    if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
-        return;
-    }
-    
-    id value = [object valueForKey:keyPath];
-    //对值做自定义转换
-    if (terminal.otherTerminal.map) {
-        value = terminal.otherTerminal.map(value);
-    }
-    
-    [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
 }
 
 @end
