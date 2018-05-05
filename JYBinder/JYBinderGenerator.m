@@ -10,6 +10,7 @@
 #import "JYBinderTerminal.h"
 #import "JYBinderChannelManager.h"
 #import "JYBinderChannel.h"
+#import "JYBinderUtil.h"
 
 @interface JYBinderGenerator ()
 
@@ -55,7 +56,10 @@
 }
 
 - (void)setObject:(JYBinderTerminal *)leadingTerminal forKeyedSubscript:(NSString *)key {
-    NSCParameterAssert(leadingTerminal != nil);
+    NSCParameterAssert(![JYBinderUtil isObjectNull:leadingTerminal]);
+    if (![leadingTerminal isKindOfClass:[JYBinderTerminal class]]) {
+        return;
+    }
     
     JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {

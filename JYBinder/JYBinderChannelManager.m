@@ -37,6 +37,12 @@
 }
 
 - (void)addChannel:(JYBinderChannel *)channel {
+    if ([JYBinderUtil isObjectNull:channel]) {
+        return;
+    }
+    if (![channel isKindOfClass:[JYBinderChannel class]]) {
+        return;
+    }
     if ([JYBinderUtil isObjectNull:channel.leadingTerminal.target] ||
         [JYBinderUtil isStringEmpty:channel.leadingTerminal.keyPath] ||
         [JYBinderUtil isObjectNull:channel.followingTerminal.target] ||
@@ -82,6 +88,12 @@
 }
 
 - (void)removeChannel:(JYBinderChannel *)channel {
+    if ([JYBinderUtil isObjectNull:channel]) {
+        return;
+    }
+    if (![channel isKindOfClass:[JYBinderChannel class]]) {
+        return;
+    }
     if ([JYBinderUtil isObjectNull:channel.leadingTerminal.target] ||
         [JYBinderUtil isStringEmpty:channel.leadingTerminal.keyPath] ||
         [JYBinderUtil isObjectNull:channel.followingTerminal.target] ||

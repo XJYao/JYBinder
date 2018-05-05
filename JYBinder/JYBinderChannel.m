@@ -55,6 +55,10 @@
     if ([JYBinderUtil isObjectNull:leadingTerminal] || [JYBinderUtil isObjectNull:followingTerminal]) {
         return nil;
     }
+    Class JYBinderTerminalClass = [JYBinderTerminal class];
+    if (![leadingTerminal isKindOfClass:JYBinderTerminalClass] || ![followingTerminal isKindOfClass:JYBinderTerminalClass]) {
+        return nil;
+    }
     self = [super init];
     if (self) {
         self.twoWay = twoWay;
@@ -111,6 +115,9 @@
     }
     
     [self.lock unlock];
+    
+    id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
+    [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
 }
 
 - (void)removeObserver {
