@@ -28,43 +28,43 @@
     self.person = [[Person alloc] init];
 
     //单向绑定person name 和label1
-    JYBindSingleWayChannel(self.label1, text) = JYBindSingleWayChannel(self.person, name);
+    JYBindToSingleWay(self.label1, text) = JYBindToSingleWay(self.person, name);
     
     //双向绑定label1 和 label2
-    JYBindTwoWayChannel(self.label1, text) = JYBindTwoWayChannel(self.label2, text);
+    JYBindToTwoWay(self.label1, text) = JYBindToTwoWay(self.label2, text);
     
     
     
     //单向绑定person age和label3
-    JYBinderTerminal *followingTerminal1 = JYBindSingleWayChannel(self.label3, text);
+    JYBinderTerminal *followingTerminal1 = JYBindToSingleWay(self.label3, text);
 
     followingTerminal1.map = ^id _Nullable(id  _Nullable value) {
         //自定义转换
         return [value stringValue];
     };
-    JYBinderTerminal *leadingTerminal1 = JYBindSingleWayChannel(self.person, age);
-    [JYBinder bindToSingleWayChannel:leadingTerminal1 followingTerminal:followingTerminal1];
+    JYBinderTerminal *leadingTerminal1 = JYBindToSingleWay(self.person, age);
+    [JYBinder bindToSingleWay:leadingTerminal1 followingTerminal:followingTerminal1];
     
     
     
-    
+//    
 //    //双向绑定person age和label3
-//    JYBinderTerminal *followingTerminal2 = JYBindTwoWayChannel(self.label3, text);
+//    JYBinderTerminal *followingTerminal2 = JYBindToTwoWay(self.label3, text);
 //
 //    followingTerminal2.map = ^id _Nullable(id  _Nullable value) {
 //        //自定义转换
 //        return [value stringValue];
 //    };
-//    JYBinderTerminal *leadingTerminal2 = JYBindTwoWayChannel(self.person, age);
+//    JYBinderTerminal *leadingTerminal2 = JYBindToTwoWay(self.person, age);
 //
 //    leadingTerminal2.map = ^id _Nullable(id  _Nullable value) {
 //        //自定义转换
 //        return @([value intValue]);
 //    };
 //
-//    [JYBinder bindToTwoWayChannel:leadingTerminal2 otherTerminal:followingTerminal2];
-
-    //解绑
+//    [JYBinder bindToTwoWay:leadingTerminal2 otherTerminal:followingTerminal2];
+//
+////    解绑
 //    [JYBinder unbindWithTerminal:leadingTerminal1 otherTerminal:followingTerminal1];
 }
 

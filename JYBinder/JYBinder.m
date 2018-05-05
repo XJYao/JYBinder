@@ -10,12 +10,12 @@
 
 @implementation JYBinder
 
-+ (void)bindToSingleWayChannel:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
-    [JYBinderGenerator bindToSingleWayChannel:leadingTerminal followingTerminal:followingTerminal];
++ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
+    [JYBinderGenerator bindToSingleWay:leadingTerminal followingTerminal:followingTerminal];
 }
 
-+ (void)bindToTwoWayChannel:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
-    [JYBinderGenerator bindToTwoWayChannel:terminal otherTerminal:otherTerminal];
++ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
+    [JYBinderGenerator bindToTwoWay:terminal otherTerminal:otherTerminal];
 }
 
 + (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {

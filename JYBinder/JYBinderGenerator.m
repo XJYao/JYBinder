@@ -33,11 +33,11 @@
     return self;
 }
 
-+ (void)bindToSingleWayChannel:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
++ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
     [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initSingleWayWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal]];
 }
 
-+ (void)bindToTwoWayChannel:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
++ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal {
     [[JYBinderChannelManager sharedInstance] addChannel:[[JYBinderChannel alloc] initTwoWayWithLeadingTerminal:terminal followingTerminal:otherTerminal]];
 }
 
@@ -59,9 +59,9 @@
     
     JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {
-        [JYBinderGenerator bindToTwoWayChannel:leadingTerminal otherTerminal:followingTerminal];
+        [JYBinderGenerator bindToTwoWay:leadingTerminal otherTerminal:followingTerminal];
     } else {
-        [JYBinderGenerator bindToSingleWayChannel:leadingTerminal followingTerminal:followingTerminal];
+        [JYBinderGenerator bindToSingleWay:leadingTerminal followingTerminal:followingTerminal];
     }
 }
 

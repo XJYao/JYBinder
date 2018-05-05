@@ -17,7 +17,7 @@
  @param KEYPATH 属性
  @return 终端
  */
-#define JYBindSingleWayChannel(TARGET, KEYPATH) \
+#define JYBindToSingleWay(TARGET, KEYPATH) \
 [[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:NO][@JYBinderKeypath(TARGET, KEYPATH)]
 
 /**
@@ -27,7 +27,7 @@
  @param KEYPATH 属性
  @return 终端
  */
-#define JYBindTwoWayChannel(TARGET, KEYPATH) \
+#define JYBindToTwoWay(TARGET, KEYPATH) \
 [[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:YES][@JYBinderKeypath(TARGET, KEYPATH)]
 
 /**
@@ -49,7 +49,7 @@
  @param leadingTerminal 监听者
  @param followingTerminal 跟随者
  */
-+ (void)bindToSingleWayChannel:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
++ (void)bindToSingleWay:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
 
 /**
  将两终端做双向绑定，互相监听跟随
@@ -57,7 +57,7 @@
  @param terminal 终端
  @param otherTerminal 另一个终端
  */
-+ (void)bindToTwoWayChannel:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
++ (void)bindToTwoWay:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
 /**
  将两终端解绑
