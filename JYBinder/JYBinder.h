@@ -67,4 +67,14 @@
  */
 + (void)unbindWithTerminal:(JYBinderTerminal *)terminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
+/**
+ 将两终端解绑
+ 
+ @param target1 对象1
+ @param keyPath1 属性1
+ @param target2 对象2
+ @param keyPath2 属性2
+ */
++ (void)unbindWithTarget1:(__weak NSObject *)target1 keyPath1:(NSString *)keyPath1 target2:(__weak NSObject *)target2 keyPath2:(NSString *)keyPath2;
+
 @end
