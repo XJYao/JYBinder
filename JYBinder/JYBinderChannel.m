@@ -69,13 +69,6 @@
         
         self.theLeadingTerminal = leadingTerminal;
         self.theFollowingTerminal = followingTerminal;
-        
-        //两终端做关联
-        self.leadingTerminal.otherTerminal = self.followingTerminal;
-        
-        if (self.twoWay) {
-            self.followingTerminal.otherTerminal = self.leadingTerminal;
-        }
     }
     return self;
 }
@@ -93,11 +86,9 @@
 }
 
 - (void)addObserver {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
-    
     __weak typeof(self) weak_self = self;
     
-    if (!self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+    if (!self.leadingTerminalObserving) {
         [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
         self.leadingTerminalObserving = YES;
         
@@ -106,7 +97,7 @@
         }];
     }
     
-    if (!self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+    if (!self.followingTerminalObserving && self.isTwoWay) {
         [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
         self.followingTerminalObserving = YES;
         
@@ -115,24 +106,19 @@
         }];
     }
     
-    dispatch_semaphore_signal(self.lock);
-    
     id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
     [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
 }
 
 - (void)removeObserver {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
-    
-    if (self.leadingTerminalObserving && ![JYBinderUtil isObjectNull:self.leadingTerminal.otherTerminal]) {
+    if (self.leadingTerminalObserving) {
         [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
         self.leadingTerminalObserving = NO;
     }
-    if (self.followingTerminalObserving && ![JYBinderUtil isObjectNull:self.followingTerminal.otherTerminal]) {
+    if (self.followingTerminalObserving) {
         [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
         self.followingTerminalObserving = NO;
     }
-    dispatch_semaphore_signal(self.lock);
 }
 
 #pragma mark - KVO
@@ -154,24 +140,39 @@
     }
     
     JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
-    if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
+    if ([JYBinderUtil isObjectNull:terminal]) {
+        if (self.isTwoWay) {
+            self.ignoreNextUpdate = NO;
+        }
+        return;
+    }
+    
+    JYBinderTerminal *otherTerminal = nil;
+    if (terminal == self.leadingTerminal) {
+        otherTerminal = self.followingTerminal;
+    } else if (terminal == self.followingTerminal) {
+        otherTerminal = self.leadingTerminal;
+    } else {
+        if (self.isTwoWay) {
+            self.ignoreNextUpdate = NO;
+        }
         return;
     }
     
     id value = [object valueForKey:keyPath];
     //对值做自定义转换
-    if (terminal.otherTerminal.map) {
-        value = terminal.otherTerminal.map(value);
+    if (otherTerminal.map) {
+        value = otherTerminal.map(value);
     }
 
-    if (terminal.otherTerminal.queue) {
+    if (otherTerminal.queue) {
         //在指定线程中赋值
-        __weak typeof(terminal) weak_terminal = terminal;
-        dispatch_async(terminal.otherTerminal.queue, ^{
-            [weak_terminal.otherTerminal.target setValue:value forKey:weak_terminal.otherTerminal.keyPath];
+        __weak typeof(otherTerminal) weak_otherTerminal = otherTerminal;
+        dispatch_async(weak_otherTerminal.queue, ^{
+            [weak_otherTerminal.target setValue:value forKey:weak_otherTerminal.keyPath];
         });
     } else {
-        [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
+        [otherTerminal.target setValue:value forKey:otherTerminal.keyPath];
     }
 }
 

@@ -31,11 +31,6 @@
 @property (nonatomic, strong) dispatch_queue_t queue;
 
 /**
- 关联的终端
- */
-@property (nonatomic, weak) JYBinderTerminal *otherTerminal;
-
-/**
  初始化
  */
 - (instancetype)initWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
