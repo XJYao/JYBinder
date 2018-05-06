@@ -37,7 +37,7 @@
 /**
  线程锁
  */
-@property (nonatomic) dispatch_semaphore_t lock;
+@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 
@@ -138,9 +138,10 @@
 #pragma mark - KVO
 
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
     
     if (self.isTwoWay) {
+        dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
+        
         //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
         if (self.ignoreNextUpdate) {
             self.ignoreNextUpdate = NO;
@@ -149,11 +150,11 @@
             return;
         }
         self.ignoreNextUpdate = YES;
+        dispatch_semaphore_signal(self.lock);
     }
     
     JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
     if ([JYBinderUtil isObjectNull:terminal.otherTerminal]) {
-        dispatch_semaphore_signal(self.lock);
         return;
     }
     
@@ -162,11 +163,16 @@
     if (terminal.otherTerminal.map) {
         value = terminal.otherTerminal.map(value);
     }
-    
-    dispatch_semaphore_signal(self.lock);
-    
-    [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
-    
+
+    if (terminal.otherTerminal.queue) {
+        //在指定线程中赋值
+        __weak typeof(terminal) weak_terminal = terminal;
+        dispatch_async(terminal.otherTerminal.queue, ^{
+            [weak_terminal.otherTerminal.target setValue:value forKey:weak_terminal.otherTerminal.keyPath];
+        });
+    } else {
+        [terminal.otherTerminal.target setValue:value forKey:terminal.otherTerminal.keyPath];
+    }
 }
 
 #pragma mark - lazy

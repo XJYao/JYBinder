@@ -26,6 +26,11 @@
 @property (nonatomic, copy) id  _Nullable (^map)(id _Nullable value);
 
 /**
+ 指定线程中赋值
+ */
+@property (nonatomic, strong) dispatch_queue_t queue;
+
+/**
  关联的终端
  */
 @property (nonatomic, weak) JYBinderTerminal *otherTerminal;

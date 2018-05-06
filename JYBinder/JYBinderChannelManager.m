@@ -22,7 +22,7 @@
 /**
  线程锁
  */
-@property (nonatomic) dispatch_semaphore_t lock;
+@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 

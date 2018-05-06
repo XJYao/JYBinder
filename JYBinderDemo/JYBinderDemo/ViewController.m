@@ -63,6 +63,7 @@
     labelTerminal.map = ^id _Nullable(id  _Nullable value) {
         return [value boolValue] ? @"开" : @"关";
     };
+    labelTerminal.queue = dispatch_get_main_queue();
     
     JYBinderTerminal *enableTerminal = JYBindToSingleWay(self.person5, enable);
     [JYBinder bindToSingleWayWithLeading:enableTerminal following:labelTerminal];
@@ -98,7 +99,10 @@
 }
 
 - (IBAction)enableClick:(id)sender {
-    self.person5.enable = !self.person5.enable;
+    __weak typeof(self) weak_self = self;
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        weak_self.person5.enable = !weak_self.person5.enable;
+    });
 }
 
 - (void)textViewDidChange:(UITextView *)textView {
