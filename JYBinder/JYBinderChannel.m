@@ -18,7 +18,7 @@
 @property (nonatomic, strong) JYBinderTerminal *theFollowingTerminal;
 
 /**
- 是否已监听KVO
+ 是否已注册KVO
  */
 @property (nonatomic, assign) BOOL leadingTerminalObserving;
 
