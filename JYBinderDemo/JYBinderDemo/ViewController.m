@@ -6,8 +6,6 @@
 //  Copyright © 2017年 JY. All rights reserved.
 //
 
-//tableview、collectionview
-//key做判断
 //多线程
 
 #import "ViewController.h"

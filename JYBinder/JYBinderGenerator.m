@@ -51,15 +51,15 @@
 }
 
 - (JYBinderTerminal *)objectForKeyedSubscript:(NSString *)key {
+    NSAssert([JYBinderUtil isEqualFromString:key toString:JYBinderKey], @"无效的Key");
     JYBinderTerminal *leadingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     return leadingTerminal;
 }
 
 - (void)setObject:(JYBinderTerminal *)leadingTerminal forKeyedSubscript:(NSString *)key {
+    NSAssert([JYBinderUtil isEqualFromString:key toString:JYBinderKey], @"无效的Key");
     NSAssert(![JYBinderUtil isObjectNull:leadingTerminal], @"leadingTerminal为空");
-    if (![leadingTerminal isKindOfClass:[JYBinderTerminal class]]) {
-        return;
-    }
+    NSAssert([leadingTerminal isKindOfClass:[JYBinderTerminal class]], @"无效的leadingTerminal");
     
     JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {

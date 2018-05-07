@@ -18,7 +18,7 @@
  @return 终端
  */
 #define JYBindToSingleWay(TARGET, KEYPATH) \
-[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:NO][@JYBinderKeypath(TARGET, KEYPATH)]
+[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:NO][JYBinderKey]
 
 /**
  生成双向绑定终端
@@ -28,7 +28,7 @@
  @return 终端
  */
 #define JYBindToTwoWay(TARGET, KEYPATH) \
-[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:YES][@JYBinderKeypath(TARGET, KEYPATH)]
+[[JYBinderGenerator alloc] initWithTarget:TARGET keyPath:@JYBinderKeypath(TARGET, KEYPATH) isTwoWay:YES][JYBinderKey]
 
 /**
  将两终端解绑
