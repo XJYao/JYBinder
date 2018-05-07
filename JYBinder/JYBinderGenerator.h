@@ -8,6 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
+//主要起到两个作用：1、代码自动补齐。 2、返回属性名字符串
 #define JYBinderKeypath(OBJ, PATH) \
 (((void)(NO && ((void)OBJ.PATH, NO)), # PATH))
 

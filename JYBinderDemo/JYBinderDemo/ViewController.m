@@ -6,6 +6,8 @@
 //  Copyright © 2017年 JY. All rights reserved.
 //
 
+//tableview、collectionview
+
 #import "ViewController.h"
 #import "Person.h"
 #import <JYBinder/JYBinder.h>
