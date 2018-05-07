@@ -9,7 +9,8 @@
 #import "JYBinderChannel.h"
 #import "JYBinderUtil.h"
 #import "JYBinderTerminal.h"
-#import "NSObject+JYBinderDeallocating.h"
+//#import "NSObject+JYBinderDeallocating.h"
+#import "NSObject+JYBinderObject.h"
 
 @interface JYBinderChannel ()
 
@@ -92,7 +93,7 @@
         [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
         self.leadingTerminalObserving = YES;
         
-        [self.leadingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+        [self.leadingTerminal.target observerDealloc:^{
             [weak_self removeObserver];
         }];
     }
@@ -100,8 +101,8 @@
     if (!self.followingTerminalObserving && self.isTwoWay) {
         [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
         self.followingTerminalObserving = YES;
-        
-        [self.followingTerminal.target addRemoveObserverWhenDeallocBlock:^(NSObject *deallocObject) {
+
+        [self.followingTerminal.target observerDealloc:^{
             [weak_self removeObserver];
         }];
     }

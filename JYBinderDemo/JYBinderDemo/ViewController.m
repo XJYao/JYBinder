@@ -9,7 +9,6 @@
 //tableview、collectionview
 //key做判断
 //多线程
-//dealloc
 
 #import "ViewController.h"
 #import "Person.h"
