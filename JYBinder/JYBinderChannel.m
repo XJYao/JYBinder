@@ -148,15 +148,17 @@
     }
     
     JYBinderTerminal *otherTerminal = nil;
-    if (terminal == self.leadingTerminal) {
-        otherTerminal = self.followingTerminal;
-    } else if (terminal == self.followingTerminal) {
-        otherTerminal = self.leadingTerminal;
-    } else {
-        if (self.isTwoWay) {
+    if (self.isTwoWay) {
+        if (terminal == self.leadingTerminal) {
+            otherTerminal = self.followingTerminal;
+        } else if (terminal == self.followingTerminal) {
+            otherTerminal = self.leadingTerminal;
+        } else {
             self.ignoreNextUpdate = NO;
+            return;
         }
-        return;
+    } else {
+        otherTerminal = self.followingTerminal;
     }
     
     id value = [object valueForKey:keyPath];
