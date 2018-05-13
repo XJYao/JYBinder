@@ -9,7 +9,6 @@
 #import "JYBinderChannel.h"
 #import "JYBinderUtil.h"
 #import "JYBinderTerminal.h"
-//#import "NSObject+JYBinderDeallocating.h"
 #import "NSObject+JYBinderObject.h"
 
 @interface JYBinderChannel ()
