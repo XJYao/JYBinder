@@ -16,8 +16,8 @@ Pod::Spec.new do |s|
   #
 
   s.name         = "JYBinder"
-  s.version      = "1.0.0"
-  s.summary      = "A framework for iOS MVVM data bind."
+  s.version      = "1.0.1"
+  s.summary      = "An iOS framework for data binding."
 
   # This description is used to generate tags and improve search results.
   #   * Think: What does it do? Why did you write it? What is the focus?
@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
   #   * Write the description between the DESC delimiters below.
   #   * Finally, don't worry about the indent, CocoaPods strips it!
   s.description  = <<-DESC
-  A framework for iOS MVVM data bind
+    An iOS framework for data binding.
                    DESC
 
   s.homepage     = "https://github.com/XJYao/JYBinder"
@@ -80,7 +80,7 @@ Pod::Spec.new do |s|
   #  Supports git, hg, bzr, svn and HTTP.
   #
 
-  s.source       = { :git => "", :tag => "#{s.version}" }
+  s.source       = { :git => "https://github.com/XJYao/JYBinder.git", :tag => "#{s.version}" }
 
 
   # ――― Source Code ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
@@ -94,7 +94,7 @@ Pod::Spec.new do |s|
   s.source_files  = "#{s.name}/**/*.{h,m}"
   # s.exclude_files = "Classes/Exclude"
 
-  s.public_header_files = "#{s.name}/JYBinder.h", "#{s.name}/JYBinderTerminal.h", "#{s.name}/JYBinderGenerator.h"
+  s.public_header_files = "#{s.name}/JYBinder.h", "#{s.name}/JYBinderTerminal.h"
 
   # ――― Resources ―――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――――― #
   #
