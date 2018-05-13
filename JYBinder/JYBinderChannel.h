@@ -35,7 +35,7 @@
 /**
  初始化双向通道
  */
-- (instancetype)initTwoWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal;
+- (instancetype)initTwoWayWithOneTerminal:(JYBinderTerminal *)oneTerminal otherTerminal:(JYBinderTerminal *)otherTerminal;
 
 /**
  添加监听

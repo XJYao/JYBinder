@@ -48,8 +48,8 @@
     return [self initWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal twoWay:NO];
 }
 
-- (instancetype)initTwoWayWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal {
-    return [self initWithLeadingTerminal:leadingTerminal followingTerminal:followingTerminal twoWay:YES];
+- (instancetype)initTwoWayWithOneTerminal:(JYBinderTerminal *)oneTerminal otherTerminal:(JYBinderTerminal *)otherTerminal {
+    return [self initWithLeadingTerminal:oneTerminal followingTerminal:otherTerminal twoWay:YES];
 }
 
 - (instancetype)initWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal twoWay:(BOOL)twoWay {
