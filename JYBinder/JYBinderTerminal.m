@@ -19,6 +19,10 @@
 
 @implementation JYBinderTerminal
 
++ (instancetype)terminalWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
+    return [[JYBinderTerminal alloc] initWithTarget:target keyPath:keyPath];
+}
+
 - (instancetype)initWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
     NSAssert(![JYBinderUtil isObjectNull:target], @"target为空");
     NSAssert(![JYBinderUtil isStringEmpty:keyPath], @"keyPath为空");

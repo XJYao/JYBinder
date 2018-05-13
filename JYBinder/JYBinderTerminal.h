@@ -33,6 +33,8 @@
 /**
  初始化
  */
++ (instancetype)terminalWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
+
 - (instancetype)initWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
 
 @end

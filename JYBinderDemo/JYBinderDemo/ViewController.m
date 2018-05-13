@@ -95,8 +95,8 @@
 }
 
 - (IBAction)unbind4:(id)sender {
-    JYBinderTerminal *person4Terminal = [[JYBinderTerminal alloc] initWithTarget:self.person4 keyPath:@"name"];
-    JYBinderTerminal *textField4Terminal = [[JYBinderTerminal alloc] initWithTarget:self.textField4 keyPath:@"text"];
+    JYBinderTerminal *person4Terminal = [JYBinderTerminal terminalWithTarget:self.person4 keyPath:@"name"];
+    JYBinderTerminal *textField4Terminal = [JYBinderTerminal terminalWithTarget:self.textField4 keyPath:@"text"];
     [JYBinder unbindWithOneTerminal:person4Terminal otherTerminal:textField4Terminal];
 }
 

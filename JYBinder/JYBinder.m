@@ -36,13 +36,13 @@
 }
 
 + (void)unbindWithTarget1:(NSObject *__weak)target1 keyPath1:(NSString *)keyPath1 target2:(NSObject *__weak)target2 keyPath2:(NSString *)keyPath2 {
-    [self unbindWithOneTerminal:[[JYBinderTerminal alloc] initWithTarget:target1 keyPath:keyPath1] otherTerminal:[[JYBinderTerminal alloc] initWithTarget:target2 keyPath:keyPath2]];
+    [self unbindWithOneTerminal:[JYBinderTerminal terminalWithTarget:target1 keyPath:keyPath1] otherTerminal:[JYBinderTerminal terminalWithTarget:target2 keyPath:keyPath2]];
 }
 
 #pragma mark - Key-Value
 
 - (JYBinderTerminal *)objectForKeyedSubscript:(NSString *)key {
-    JYBinderTerminal *leadingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
+    JYBinderTerminal *leadingTerminal = [JYBinderTerminal terminalWithTarget:self.target keyPath:self.keyPath];
     return leadingTerminal;
 }
 
@@ -50,7 +50,7 @@
     NSAssert(![JYBinderUtil isObjectNull:leadingTerminal], @"【JYBinder】: leadingTerminal为空");
     NSAssert([leadingTerminal isKindOfClass:[JYBinderTerminal class]], @"【JYBinder】: 无效的leadingTerminal");
     
-    JYBinderTerminal *followingTerminal = [[JYBinderTerminal alloc] initWithTarget:self.target keyPath:self.keyPath];
+    JYBinderTerminal *followingTerminal = [JYBinderTerminal terminalWithTarget:self.target keyPath:self.keyPath];
     if (self.isTwoWay) {
         [JYBinder bindToTwoWayWithOneTerminal:leadingTerminal otherTerminal:followingTerminal];
     } else {
