@@ -24,8 +24,8 @@
 }
 
 - (instancetype)initWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
-    NSAssert(![JYBinderUtil isObjectNull:target], @"target为空");
-    NSAssert(![JYBinderUtil isStringEmpty:keyPath], @"keyPath为空");
+    NSAssert(![JYBinderUtil isObjectNull:target], @"【JYBinder】: target为空");
+    NSAssert(![JYBinderUtil isStringEmpty:keyPath], @"【JYBinder】: keyPath为空");
     
     self = [super init];
     if (self) {
