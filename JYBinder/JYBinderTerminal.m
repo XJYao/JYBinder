@@ -19,7 +19,7 @@
 
 @implementation JYBinderTerminal
 
-+ (instancetype)terminalWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath {
++ (instancetype)terminalWithTarget:(NSObject *__weak)target keyPath:(NSString *)keyPath { 
     return [[JYBinderTerminal alloc] initWithTarget:target keyPath:keyPath];
 }
 
