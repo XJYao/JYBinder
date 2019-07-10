@@ -13,10 +13,6 @@
 
 @interface JYBinderChannel ()
 
-@property (nonatomic, strong) JYBinderTerminal *theLeadingTerminal;
-
-@property (nonatomic, strong) JYBinderTerminal *theFollowingTerminal;
-
 /**
  是否已注册KVO
  */
@@ -28,16 +24,6 @@
  防止死循环
  */
 @property (nonatomic, assign) BOOL ignoreNextUpdate;
-
-/**
- 是否双向
- */
-@property (nonatomic, assign) BOOL twoWay;
-
-/**
- 线程锁
- */
-@property (nonatomic, strong) dispatch_semaphore_t lock;
 
 @end
 
@@ -61,63 +47,60 @@
     }
     self = [super init];
     if (self) {
-        self.twoWay = twoWay;
+        self.isTwoWay = twoWay;
         self.leadingTerminalObserving = NO;
         self.followingTerminalObserving = NO;
-        
         self.ignoreNextUpdate = NO;
         
-        self.theLeadingTerminal = leadingTerminal;
-        self.theFollowingTerminal = followingTerminal;
+        self.leadingTerminal = leadingTerminal;
+        self.followingTerminal = followingTerminal;
     }
     return self;
 }
 
-- (BOOL)isTwoWay {
-    return self.twoWay;
-}
-
-- (JYBinderTerminal *)leadingTerminal {
-    return self.theLeadingTerminal;
-}
-
-- (JYBinderTerminal *)followingTerminal {
-    return self.theFollowingTerminal;
-}
-
 - (void)addObserver {
-    __weak typeof(self) weak_self = self;
-    
-    if (!self.leadingTerminalObserving) {
-        [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
-        self.leadingTerminalObserving = YES;
+    @synchronized (self) {
+        __weak typeof(self) weakSelf = self;
         
-        [self.leadingTerminal.target observerDealloc:^{
-            [weak_self removeObserver];
-        }];
+        if (!self.leadingTerminalObserving) {
+            [self.leadingTerminal.target addObserver:self forKeyPath:self.leadingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.leadingTerminal)];
+            self.leadingTerminalObserving = YES;
+            
+            [self.leadingTerminal.target observerDealloc:^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf removeObserver];
+                }
+            }];
+        }
+        
+        if (!self.followingTerminalObserving && self.isTwoWay) {
+            [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
+            self.followingTerminalObserving = YES;
+            
+            [self.followingTerminal.target observerDealloc:^{
+                __strong typeof(weakSelf) strongSelf = weakSelf;
+                if (strongSelf) {
+                    [strongSelf removeObserver];
+                }
+            }];
+        }
+        
+        id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
+        [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
     }
-    
-    if (!self.followingTerminalObserving && self.isTwoWay) {
-        [self.followingTerminal.target addObserver:self forKeyPath:self.followingTerminal.keyPath options:NSKeyValueObservingOptionNew context:(__bridge void * _Nullable)(self.followingTerminal)];
-        self.followingTerminalObserving = YES;
-
-        [self.followingTerminal.target observerDealloc:^{
-            [weak_self removeObserver];
-        }];
-    }
-    
-    id value = [self.leadingTerminal.target valueForKey:self.leadingTerminal.keyPath];
-    [self.leadingTerminal.target setValue:value forKey:self.leadingTerminal.keyPath];
 }
 
 - (void)removeObserver {
-    if (self.leadingTerminalObserving) {
-        [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
-        self.leadingTerminalObserving = NO;
-    }
-    if (self.followingTerminalObserving) {
-        [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
-        self.followingTerminalObserving = NO;
+    @synchronized (self) {
+        if (self.leadingTerminalObserving) {
+            [self.leadingTerminal.target removeObserver:self forKeyPath:self.leadingTerminal.keyPath context:(__bridge void * _Nullable)(self.leadingTerminal)];
+            self.leadingTerminalObserving = NO;
+        }
+        if (self.followingTerminalObserving) {
+            [self.followingTerminal.target removeObserver:self forKeyPath:self.followingTerminal.keyPath context:(__bridge void * _Nullable)(self.followingTerminal)];
+            self.followingTerminalObserving = NO;
+        }
     }
 }
 
@@ -126,39 +109,52 @@
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     
     if (self.isTwoWay) {
-        dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
-        
-        //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
-        if (self.ignoreNextUpdate) {
-            self.ignoreNextUpdate = NO;
-            
-            dispatch_semaphore_signal(self.lock);
+        BOOL shouldReturn = NO;
+        @synchronized (self) {
+            //双向绑定情况下，A->B，B->A，会造成死循环，所以需过滤B通知A修改的情况
+            if (self.ignoreNextUpdate) {
+                self.ignoreNextUpdate = NO;
+                
+                shouldReturn = YES;
+            } else {
+                self.ignoreNextUpdate = YES;
+            }
+        }
+        if (shouldReturn) {
             return;
         }
-        self.ignoreNextUpdate = YES;
-        dispatch_semaphore_signal(self.lock);
     }
     
     JYBinderTerminal *terminal = (__bridge JYBinderTerminal *)(context);
     if ([JYBinderUtil isObjectNull:terminal]) {
         if (self.isTwoWay) {
-            self.ignoreNextUpdate = NO;
+            @synchronized (self) {
+                self.ignoreNextUpdate = NO;
+            }
         }
         return;
     }
     
     JYBinderTerminal *otherTerminal = nil;
     if (self.isTwoWay) {
-        if (terminal == self.leadingTerminal) {
-            otherTerminal = self.followingTerminal;
-        } else if (terminal == self.followingTerminal) {
-            otherTerminal = self.leadingTerminal;
-        } else {
-            self.ignoreNextUpdate = NO;
+        BOOL shouldReturn = NO;
+        @synchronized (self) {
+            if (terminal == self.leadingTerminal) {
+                otherTerminal = self.followingTerminal;
+            } else if (terminal == self.followingTerminal) {
+                otherTerminal = self.leadingTerminal;
+            } else {
+                self.ignoreNextUpdate = NO;
+                shouldReturn = YES;
+            }
+        }
+        if (shouldReturn) {
             return;
         }
     } else {
-        otherTerminal = self.followingTerminal;
+        @synchronized (self) {
+            otherTerminal = self.followingTerminal;
+        }
     }
     
     id value = [object valueForKey:keyPath];
@@ -171,20 +167,14 @@
         //在指定线程中赋值
         __weak typeof(otherTerminal) weak_otherTerminal = otherTerminal;
         dispatch_async(weak_otherTerminal.queue, ^{
-            [weak_otherTerminal.target setValue:value forKey:weak_otherTerminal.keyPath];
+            __strong typeof(weak_otherTerminal) strong_otherTerminal = weak_otherTerminal;
+            if (strong_otherTerminal) {
+                [strong_otherTerminal.target setValue:value forKey:weak_otherTerminal.keyPath];
+            }
         });
     } else {
         [otherTerminal.target setValue:value forKey:otherTerminal.keyPath];
     }
-}
-
-#pragma mark - lazy
-
-- (dispatch_semaphore_t)lock {
-    if (!_lock) {
-        _lock = dispatch_semaphore_create(1);
-    }
-    return _lock;
 }
 
 @end

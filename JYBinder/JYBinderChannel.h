@@ -15,17 +15,17 @@
 /**
  是否双向
  */
-@property (nonatomic, assign, readonly) BOOL isTwoWay;
+@property (nonatomic, assign) BOOL isTwoWay;
 
 /**
  监听者
  */
-@property (nonatomic, strong, readonly) JYBinderTerminal *leadingTerminal;
+@property (nonatomic, strong) JYBinderTerminal *leadingTerminal;
 
 /**
  跟随者
  */
-@property (nonatomic, strong, readonly) JYBinderTerminal *followingTerminal;
+@property (nonatomic, strong) JYBinderTerminal *followingTerminal;
 
 /**
  初始化单向通道

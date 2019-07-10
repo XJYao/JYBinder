@@ -13,28 +13,28 @@
 /**
  对象
  */
-@property (nonatomic, weak, readonly) NSObject *target;
+@property (nonatomic, weak, readonly) NSObject * _Nullable target;
 
 /**
  属性
  */
-@property (nonatomic, copy, readonly) NSString *keyPath;
+@property (nonatomic, copy, readonly) NSString * _Nullable keyPath;
 
 /**
  自定义转换值
  */
-@property (nonatomic, copy) id  _Nullable (^map)(id _Nullable value);
+@property (nonatomic, copy) id _Nullable (^ _Nonnull map)(id _Nullable value);
 
 /**
  指定线程中赋值
  */
-@property (nonatomic, strong) dispatch_queue_t queue;
+@property (nonatomic, strong) dispatch_queue_t _Nullable queue;
 
 /**
  初始化
  */
-+ (instancetype)terminalWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
++ (instancetype _Nonnull)terminalWithTarget:(__weak NSObject *_Nullable)target keyPath:(NSString *_Nullable)keyPath;
 
-- (instancetype)initWithTarget:(__weak NSObject *)target keyPath:(NSString *)keyPath;
+- (instancetype _Nonnull)initWithTarget:(__weak NSObject *_Nullable)target keyPath:(NSString *_Nullable)keyPath;
 
 @end

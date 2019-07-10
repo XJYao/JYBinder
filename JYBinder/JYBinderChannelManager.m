@@ -19,11 +19,6 @@
  */
 @property (nonatomic, strong) NSMapTable *channels;
 
-/**
- 线程锁
- */
-@property (nonatomic, strong) dispatch_semaphore_t lock;
-
 @end
 
 @implementation JYBinderChannelManager
@@ -37,6 +32,14 @@
         manager = [[[self class] alloc] init];
     });
     return manager;
+}
+
+- (instancetype)init {
+    self = [super init];
+    if (self) {
+        self.channels = [NSMapTable weakToStrongObjectsMapTable];
+    }
+    return self;
 }
 
 - (void)addChannel:(JYBinderChannel *)channel {
@@ -53,41 +56,38 @@
         return;
     }
     
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
-    
     //同一对终端只能存在一个通道，如果已存在就不再做保存。
     JYBinderChannel *existChannel = [self existChannelWithLeadingTerminal:channel.leadingTerminal followingTerminal:channel.followingTerminal shouldRemove:NO];
     if (![JYBinderUtil isObjectNull:existChannel]) {
         [existChannel addObserver];
-        dispatch_semaphore_signal(self.lock);
         return;
     }
     existChannel = [self existChannelWithLeadingTerminal:channel.followingTerminal followingTerminal:channel.leadingTerminal shouldRemove:NO];
     if (![JYBinderUtil isObjectNull:existChannel]) {
         [existChannel addObserver];
-        dispatch_semaphore_signal(self.lock);
         return;
     }
     
-    NSMapTable *leadingKeyToFollowT = [self.channels objectForKey:channel.leadingTerminal.target];
-    if ([JYBinderUtil isObjectNull:leadingKeyToFollowT]) {
-        leadingKeyToFollowT = [NSMapTable strongToStrongObjectsMapTable];
-        [self.channels setObject:leadingKeyToFollowT forKey:channel.leadingTerminal.target];
+    @synchronized (self) {
+        NSMapTable *leadingKeyToFollowT = [self.channels objectForKey:channel.leadingTerminal.target];
+        if ([JYBinderUtil isObjectNull:leadingKeyToFollowT]) {
+            leadingKeyToFollowT = [NSMapTable strongToStrongObjectsMapTable];
+            [self.channels setObject:leadingKeyToFollowT forKey:channel.leadingTerminal.target];
+        }
+        NSMapTable *followTargetToKey = [leadingKeyToFollowT objectForKey:channel.leadingTerminal.keyPath];
+        if ([JYBinderUtil isObjectNull:followTargetToKey]) {
+            followTargetToKey = [NSMapTable weakToStrongObjectsMapTable];
+            [leadingKeyToFollowT setObject:followTargetToKey forKey:channel.leadingTerminal.keyPath];
+        }
+        NSMapTable *followKeyToChannel = [followTargetToKey objectForKey:channel.followingTerminal.target];
+        if ([JYBinderUtil isObjectNull:followKeyToChannel]) {
+            followKeyToChannel = [NSMapTable strongToStrongObjectsMapTable];
+            [followTargetToKey setObject:followKeyToChannel forKey:channel.followingTerminal.target];
+        }
+        [followKeyToChannel setObject:channel forKey:channel.followingTerminal.keyPath];
     }
-    NSMapTable *followTargetToKey = [leadingKeyToFollowT objectForKey:channel.leadingTerminal.keyPath];
-    if ([JYBinderUtil isObjectNull:followTargetToKey]) {
-        followTargetToKey = [NSMapTable weakToStrongObjectsMapTable];
-        [leadingKeyToFollowT setObject:followTargetToKey forKey:channel.leadingTerminal.keyPath];
-    }
-    NSMapTable *followKeyToChannel = [followTargetToKey objectForKey:channel.followingTerminal.target];
-    if ([JYBinderUtil isObjectNull:followKeyToChannel]) {
-        followKeyToChannel = [NSMapTable strongToStrongObjectsMapTable];
-        [followTargetToKey setObject:followKeyToChannel forKey:channel.followingTerminal.target];
-    }
-    [followKeyToChannel setObject:channel forKey:channel.followingTerminal.keyPath];
-    [channel addObserver];
     
-    dispatch_semaphore_signal(self.lock);
+    [channel addObserver];
 }
 
 - (void)removeChannel:(JYBinderChannel *)channel {
@@ -104,53 +104,36 @@
         return;
     }
     
-    dispatch_semaphore_wait(self.lock, DISPATCH_TIME_FOREVER);
-    
     JYBinderChannel *existChannel = [self existChannelWithLeadingTerminal:channel.leadingTerminal followingTerminal:channel.followingTerminal shouldRemove:YES];
     if ([JYBinderUtil isObjectNull:existChannel]) {
         existChannel = [self existChannelWithLeadingTerminal:channel.followingTerminal followingTerminal:channel.leadingTerminal shouldRemove:YES];
     }
     [existChannel removeObserver];
-    
-    dispatch_semaphore_signal(self.lock);
 }
 
 #pragma mark - Private
 
 - (JYBinderChannel *)existChannelWithLeadingTerminal:(JYBinderTerminal *)leadingTerminal followingTerminal:(JYBinderTerminal *)followingTerminal shouldRemove:(BOOL)shouldRemove {
-    NSMapTable *leadingKeyToFollowT = [self.channels objectForKey:leadingTerminal.target];
-    if ([JYBinderUtil isObjectNull:leadingKeyToFollowT]) {
-        return nil;
+    
+    JYBinderChannel *channel = nil;
+    @synchronized (self) {
+        NSMapTable *leadingKeyToFollowT = [self.channels objectForKey:leadingTerminal.target];
+        if (![JYBinderUtil isObjectNull:leadingKeyToFollowT]) {
+            NSMapTable *followTargetToKey = [leadingKeyToFollowT objectForKey:leadingTerminal.keyPath];
+            if (![JYBinderUtil isObjectNull:followTargetToKey]) {
+                NSMapTable *followKeyToChannel = [followTargetToKey objectForKey:followingTerminal.target];
+                if (![JYBinderUtil isObjectNull:followKeyToChannel]) {
+                    channel = [followKeyToChannel objectForKey:followingTerminal.keyPath];
+                    
+                    if (shouldRemove) {
+                        [followKeyToChannel removeObjectForKey:followingTerminal.keyPath];
+                    }
+                }
+            }
+        }
     }
-    NSMapTable *followTargetToKey = [leadingKeyToFollowT objectForKey:leadingTerminal.keyPath];
-    if ([JYBinderUtil isObjectNull:followTargetToKey]) {
-        return nil;
-    }
-    NSMapTable *followKeyToChannel = [followTargetToKey objectForKey:followingTerminal.target];
-    if ([JYBinderUtil isObjectNull:followKeyToChannel]) {
-        return nil;
-    }
-    JYBinderChannel *channel = [followKeyToChannel objectForKey:followingTerminal.keyPath];
-    if (shouldRemove) {
-        [followKeyToChannel removeObjectForKey:followingTerminal.keyPath];
-    }
+    
     return channel;
-}
-
-#pragma mark - lazy
-
-- (NSMapTable *)channels {
-    if ([JYBinderUtil isObjectNull:_channels]) {
-        _channels = [NSMapTable weakToStrongObjectsMapTable];
-    }
-    return _channels;
-}
-
-- (dispatch_semaphore_t)lock {
-    if (!_lock) {
-        _lock = dispatch_semaphore_create(1);
-    }
-    return _lock;
 }
 
 @end

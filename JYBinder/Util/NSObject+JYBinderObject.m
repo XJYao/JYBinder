@@ -18,6 +18,7 @@ void *kJYBinderObjectWatcher = &kJYBinderObjectWatcher;
 - (void)observerDealloc:(void (^)(void))deallocBlock {
     JYBinderObjectWatcher *watcher = objc_getAssociatedObject(self, kJYBinderObjectWatcher);
     if (![JYBinderUtil isObjectNull:watcher] && [watcher isKindOfClass:[JYBinderObjectWatcher class]]) {
+        watcher.deallocBlock = deallocBlock;
         return;
     }
     
